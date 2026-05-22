@@ -17,47 +17,47 @@ const RECENT_ACTIVITIES: Activity[] = [
   {
     id: 'act1',
     type: 'maintenance',
-    title: 'Brake Replacement',
-    description: 'Ford Transit — completed service',
+    title: 'Cambio de Frenos',
+    description: 'Ford Transit — servicio completado',
     time: '2025-04-15T11:00:00Z',
     vehicleLabel: 'DEF-9012',
   },
   {
     id: 'act2',
     type: 'fuel',
-    title: 'Fuel Refill',
-    description: 'BMW 5 Series — 48L at Mobil',
+    title: 'Carga de Combustible',
+    description: 'BMW 5 Series — 48L en Mobil',
     time: '2025-04-15T09:20:00Z',
     vehicleLabel: 'ABC-1234',
   },
   {
     id: 'act3',
     type: 'document',
-    title: 'Insurance Renewed',
-    description: 'Honda CR-V — Allianz, valid until Feb 2026',
+    title: 'Seguro Renovado',
+    description: 'Honda CR-V — Allianz, vigente hasta Feb 2026',
     time: '2025-04-14T14:00:00Z',
     vehicleLabel: 'PQR-5678',
   },
   {
     id: 'act4',
     type: 'vehicle',
-    title: 'Vehicle Added',
-    description: 'Tesla Model 3 added to fleet',
+    title: 'Vehiculo Agregado',
+    description: 'Tesla Model 3 agregado a la flota',
     time: '2025-04-12T10:00:00Z',
     vehicleLabel: 'GHI-3456',
   },
   {
     id: 'act5',
     type: 'driver',
-    title: 'Driver Assigned',
+    title: 'Conductor Asignado',
     description: 'Ava Thompson → Toyota Camry',
     time: '2025-04-11T16:30:00Z',
   },
   {
     id: 'act6',
     type: 'maintenance',
-    title: 'Oil Change',
-    description: 'Toyota Camry — scheduled service',
+    title: 'Cambio de Aceite',
+    description: 'Toyota Camry — servicio programado',
     time: '2025-04-05T09:00:00Z',
     vehicleLabel: 'XYZ-5678',
   },
@@ -76,10 +76,10 @@ function timeAgo(dateStr: string): string {
   const now = new Date()
   const diff = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-  if (diff < 60) return 'Just now'
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`
-  if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`
+  if (diff < 60) return 'Ahora mismo'
+  if (diff < 3600) return `${Math.floor(diff / 60)}min atras`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h atras`
+  if (diff < 604800) return `${Math.floor(diff / 86400)}d atras`
   return formatDate(dateStr, 'MMM d')
 }
 
@@ -88,8 +88,8 @@ export function RecentActivity() {
     <div className="bg-surface rounded-2xl border border-subtle shadow-card p-6">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-[15px] font-semibold text-text-primary">Recent Activity</h3>
-          <p className="text-[12px] text-text-muted mt-0.5">Latest fleet updates</p>
+          <h3 className="text-[15px] font-semibold text-text-primary">Actividad Reciente</h3>
+          <p className="text-[12px] text-text-muted mt-0.5">Ultimas actualizaciones de la flota</p>
         </div>
         <Clock className="w-4 h-4 text-text-muted" />
       </div>

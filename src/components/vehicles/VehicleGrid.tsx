@@ -17,19 +17,19 @@ interface VehicleGridProps {
 }
 
 const STATUS_FILTERS: { label: string; value: VehicleStatus | 'all' }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Active', value: 'active' },
-  { label: 'Maintenance', value: 'maintenance' },
-  { label: 'Inactive', value: 'inactive' },
-  { label: 'Out of Service', value: 'out_of_service' },
+  { label: 'Todos', value: 'all' },
+  { label: 'Activo', value: 'active' },
+  { label: 'En Reparacion', value: 'maintenance' },
+  { label: 'Inactivo', value: 'inactive' },
+  { label: 'Fuera de Servicio', value: 'out_of_service' },
 ]
 
 const FUEL_FILTERS: { label: string; value: FuelType | 'all' }[] = [
-  { label: 'All Fuels', value: 'all' },
-  { label: 'Gasoline', value: 'gasoline' },
+  { label: 'Todos', value: 'all' },
+  { label: 'Nafta', value: 'gasoline' },
   { label: 'Diesel', value: 'diesel' },
-  { label: 'Electric', value: 'electric' },
-  { label: 'Hybrid', value: 'hybrid' },
+  { label: 'Electrico', value: 'electric' },
+  { label: 'Hibrido', value: 'hybrid' },
 ]
 
 export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridProps) {
@@ -41,7 +41,7 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
     return vehicles.filter((v) => {
       const matchesSearch =
         !search ||
-        `${v.brand} ${v.model} ${v.plateNumber} ${v.vin}`.toLowerCase().includes(search.toLowerCase())
+        `${v.brand} ${v.model} ${v.plateNumber} ${v.motor} ${v.chasis}`.toLowerCase().includes(search.toLowerCase())
       const matchesStatus = statusFilter === 'all' || v.status === statusFilter
       const matchesFuel = fuelFilter === 'all' || v.fuelType === fuelFilter
       return matchesSearch && matchesStatus && matchesFuel
@@ -59,7 +59,7 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted" />
           <input
             type="text"
-            placeholder="Search by brand, plate, VIN…"
+            placeholder="Buscar por marca, patente, VIN…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={cn(
@@ -102,9 +102,9 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-[13px] text-text-muted">
-            {filtered.length} {filtered.length === 1 ? 'vehicle' : 'vehicles'}
+            {filtered.length} {filtered.length === 1 ? 'vehiculo' : 'vehiculos'}
             {hasActiveFilters && (
-              <span className="text-text-disabled"> · filtered</span>
+              <span className="text-text-disabled"> · filtrado</span>
             )}
           </span>
           {hasActiveFilters && (
@@ -116,7 +116,7 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
               }}
               className="text-[12px] text-accent-light hover:text-accent transition-colors flex items-center gap-1"
             >
-              <X className="w-3 h-3" /> Clear
+              <X className="w-3 h-3" /> Limpiar
             </button>
           )}
         </div>
@@ -128,15 +128,15 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
           <EmptyState
             key="empty"
             icon={Car}
-            title="No vehicles found"
+            title="No se encontraron vehiculos"
             description={
               search
-                ? `No vehicles match "${search}". Try a different search term.`
-                : 'No vehicles match the selected filters.'
+                ? `No se encontraron vehiculos para "${search}". Intenta con otro termino.`
+                : 'Ningun vehiculo coincide con los filtros seleccionados.'
             }
             action={
               onAdd
-                ? { label: 'Add Vehicle', onClick: onAdd }
+                ? { label: 'Agregar Vehiculo', onClick: onAdd }
                 : undefined
             }
           />

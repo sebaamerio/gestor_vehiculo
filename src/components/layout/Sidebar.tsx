@@ -27,11 +27,11 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Vehicles', href: '/vehicles', icon: Car },
-  { label: 'Maintenance', href: '/maintenance', icon: Wrench, badge: 3 },
-  { label: 'Drivers', href: '/drivers', icon: Users },
-  { label: 'Documents', href: '/documents', icon: FileText },
-  { label: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { label: 'Vehiculos', href: '/vehicles', icon: Car },
+  { label: 'Reparaciones', href: '/maintenance', icon: Wrench, badge: 3 },
+  { label: 'Conductores', href: '/drivers', icon: Users },
+  { label: 'Documentos', href: '/documents', icon: FileText },
+  { label: 'Estadisticas', href: '/analytics', icon: BarChart3 },
 ]
 
 interface SidebarProps {
@@ -47,7 +47,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       initial={false}
       animate={{ width: collapsed ? 64 : 240 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-      className="relative flex flex-col h-full bg-[#0D0D0D] border-r border-subtle overflow-hidden flex-shrink-0"
+      className="relative flex flex-col h-full bg-[var(--color-sidebar)] border-r border-subtle overflow-hidden flex-shrink-0"
     >
       {/* Logo */}
       <div className="flex items-center h-16 px-4 border-b border-subtle flex-shrink-0">
@@ -150,7 +150,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             'group flex items-center h-9 rounded-lg transition-all duration-150 text-text-muted hover:text-text-secondary hover:bg-subtle',
             collapsed ? 'justify-center px-0 w-10 mx-auto' : 'px-3 gap-3'
           )}
-          title={collapsed ? 'Settings' : undefined}
+          title={collapsed ? 'Configuracion' : undefined}
         >
           <Settings className="w-[18px] h-[18px] flex-shrink-0" />
           <AnimatePresence mode="wait">
@@ -162,7 +162,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 transition={{ duration: 0.1 }}
                 className="text-[13px] font-medium"
               >
-                Settings
+                Configuracion
               </motion.span>
             )}
           </AnimatePresence>
@@ -175,7 +175,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             'group flex items-center h-9 rounded-lg transition-all duration-150 text-text-muted hover:text-text-secondary hover:bg-subtle w-full',
             collapsed ? 'justify-center px-0 w-10 mx-auto' : 'px-3 gap-3'
           )}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? 'Expandir menu' : 'Colapsar menu'}
         >
           {collapsed ? (
             <ChevronRight className="w-[18px] h-[18px]" />
@@ -188,7 +188,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 exit={{ opacity: 0 }}
                 className="text-[13px] font-medium"
               >
-                Collapse
+                Colapsar
               </motion.span>
             </>
           )}

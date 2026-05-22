@@ -52,13 +52,13 @@ export default function VehiclesPage() {
     <AppShell onAddVehicle={handleAdd}>
       <div className="px-6 md:px-8 py-8 max-w-[1400px] mx-auto">
         <PageHeader
-          title="Fleet Vehicles"
-          description={`${vehicles.length} vehicles · ${vehicles.filter((v) => v.status === 'active').length} active`}
+          title="Vehiculos"
+          description={`${vehicles.length} vehiculos · ${vehicles.filter((v) => v.status === 'active').length} activos`}
           icon={Car}
           actions={
             <Button onClick={handleAdd} size="sm">
               <Plus className="w-3.5 h-3.5 mr-1.5" />
-              Add Vehicle
+              Agregar Vehiculo
             </Button>
           }
         />

@@ -65,37 +65,37 @@ export function getExpiryStatus(dateStr: string): 'expired' | 'critical' | 'warn
 
 export function getStatusLabel(status: VehicleStatus): string {
   const labels: Record<VehicleStatus, string> = {
-    active: 'Active',
-    maintenance: 'In Maintenance',
-    inactive: 'Inactive',
-    out_of_service: 'Out of Service',
+    active: 'Activo',
+    maintenance: 'En Reparacion',
+    inactive: 'Inactivo',
+    out_of_service: 'Fuera de Servicio',
   }
   return labels[status]
 }
 
 export function getFuelTypeLabel(fuelType: FuelType): string {
   const labels: Record<FuelType, string> = {
-    gasoline: 'Gasoline',
+    gasoline: 'Nafta',
     diesel: 'Diesel',
-    electric: 'Electric',
-    hybrid: 'Hybrid',
-    cng: 'CNG',
+    electric: 'Electrico',
+    hybrid: 'Hibrido',
+    cng: 'GNC',
   }
   return labels[fuelType]
 }
 
 export function getMaintenanceTypeLabel(type: MaintenanceType): string {
   const labels: Record<MaintenanceType, string> = {
-    oil_change: 'Oil Change',
-    tire_rotation: 'Tire Rotation',
-    brake_inspection: 'Brake Inspection',
-    air_filter: 'Air Filter',
-    transmission: 'Transmission',
-    battery: 'Battery',
-    coolant: 'Coolant',
-    alignment: 'Wheel Alignment',
-    general_inspection: 'General Inspection',
-    other: 'Other',
+    oil_change: 'Cambio de Aceite',
+    tire_rotation: 'Rotacion de Neumaticos',
+    brake_inspection: 'Revision de Frenos',
+    air_filter: 'Filtro de Aire',
+    transmission: 'Transmision',
+    battery: 'Bateria',
+    coolant: 'Refrigerante',
+    alignment: 'Alineacion',
+    general_inspection: 'Inspeccion General',
+    other: 'Otro',
   }
   return labels[type]
 }

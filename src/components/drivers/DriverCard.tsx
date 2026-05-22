@@ -13,9 +13,9 @@ interface DriverCardProps {
 }
 
 const STATUS_CONFIG = {
-  active: { bg: 'bg-fleet-active-bg', text: 'text-fleet-active', dot: 'bg-fleet-active', label: 'Active' },
-  inactive: { bg: 'bg-fleet-inactive-bg', text: 'text-fleet-inactive', dot: 'bg-fleet-inactive', label: 'Inactive' },
-  on_leave: { bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance', dot: 'bg-fleet-maintenance', label: 'On Leave' },
+  active: { bg: 'bg-fleet-active-bg', text: 'text-fleet-active', dot: 'bg-fleet-active', label: 'Activo' },
+  inactive: { bg: 'bg-fleet-inactive-bg', text: 'text-fleet-inactive', dot: 'bg-fleet-inactive', label: 'Inactivo' },
+  on_leave: { bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance', dot: 'bg-fleet-maintenance', label: 'De Licencia' },
 }
 
 export function DriverCard({ driver, vehicle, index = 0 }: DriverCardProps) {
@@ -71,20 +71,20 @@ export function DriverCard({ driver, vehicle, index = 0 }: DriverCardProps) {
         <div className="grid grid-cols-2 gap-3">
           {/* Vehicle */}
           <div>
-            <div className="text-[10px] text-text-disabled uppercase tracking-wider mb-1">Vehicle</div>
+            <div className="text-[10px] text-text-disabled uppercase tracking-wider mb-1">Vehiculo</div>
             {vehicle ? (
               <div className="flex items-center gap-1.5 text-[12px] text-text-secondary">
                 <Car className="w-3 h-3 text-text-muted" />
                 <span className="truncate">{vehicle.brand} {vehicle.model}</span>
               </div>
             ) : (
-              <span className="text-[12px] text-text-muted">Unassigned</span>
+              <span className="text-[12px] text-text-muted">Sin asignar</span>
             )}
           </div>
 
           {/* License */}
           <div>
-            <div className="text-[10px] text-text-disabled uppercase tracking-wider mb-1">License</div>
+            <div className="text-[10px] text-text-disabled uppercase tracking-wider mb-1">Licencia</div>
             <div className="flex items-center gap-1.5">
               <Shield className="w-3 h-3 text-text-muted flex-shrink-0" />
               <span
@@ -94,9 +94,9 @@ export function DriverCard({ driver, vehicle, index = 0 }: DriverCardProps) {
                   licenseStatus === 'warning' ? 'text-fleet-maintenance' : 'text-fleet-active'
                 )}
               >
-                {licenseStatus === 'expired' ? 'Expired' :
+                {licenseStatus === 'expired' ? 'Vencida' :
                  licenseStatus === 'ok' ? formatDate(driver.licenseExpiration, 'MMM yyyy') :
-                 `${daysUntilExpiry(driver.licenseExpiration)}d left`}
+                 `${daysUntilExpiry(driver.licenseExpiration)}d restantes`}
               </span>
             </div>
           </div>
@@ -104,7 +104,7 @@ export function DriverCard({ driver, vehicle, index = 0 }: DriverCardProps) {
 
         {driver.totalTrips !== undefined && (
           <div className="mt-3 text-[11px] text-text-muted">
-            {driver.totalTrips} trips · Joined {formatDate(driver.joinDate, 'MMM yyyy')}
+            {driver.totalTrips} viajes · Desde {formatDate(driver.joinDate, 'MMM yyyy')}
           </div>
         )}
       </div>

@@ -21,18 +21,18 @@ export default function MaintenancePage() {
     <AppShell>
       <div className="px-6 md:px-8 py-8 max-w-[1200px] mx-auto">
         <PageHeader
-          title="Maintenance"
-          description="Track service history and upcoming maintenance"
+          title="Reparaciones"
+          description="Historial de servicios y reparaciones programadas"
           icon={Wrench}
         />
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: AlertTriangle, label: 'Overdue', value: overdue.length, color: 'text-fleet-danger', bg: 'bg-fleet-danger-bg' },
-            { icon: Calendar, label: 'Scheduled', value: scheduled.length, color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
-            { icon: Wrench, label: 'Completed', value: completed.length, color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
-            { icon: DollarSign, label: 'Total Spent', value: formatCurrency(totalCost), color: 'text-accent-light', bg: 'bg-accent/10' },
+            { icon: AlertTriangle, label: 'Vencidas', value: overdue.length, color: 'text-fleet-danger', bg: 'bg-fleet-danger-bg' },
+            { icon: Calendar, label: 'Programadas', value: scheduled.length, color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
+            { icon: Wrench, label: 'Completadas', value: completed.length, color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
+            { icon: DollarSign, label: 'Total Gastado', value: formatCurrency(totalCost), color: 'text-accent-light', bg: 'bg-accent/10' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -54,14 +54,14 @@ export default function MaintenancePage() {
         <Tabs defaultValue="upcoming">
           <TabsList className="mb-6">
             <TabsTrigger value="upcoming">
-              Upcoming
+              Proximas
               {scheduled.length > 0 && (
                 <span className="ml-1.5 text-[10px] bg-subtle px-1.5 py-0.5 rounded-full text-text-muted">
                   {scheduled.length}
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="history">Historial</TabsTrigger>
           </TabsList>
 
           <TabsContent value="upcoming">
@@ -70,14 +70,14 @@ export default function MaintenancePage() {
                 <MaintenanceList
                   records={overdue}
                   vehicles={MOCK_VEHICLES}
-                  title="Overdue"
+                  title="Vencidas"
                 />
               </div>
             )}
             <MaintenanceList
               records={scheduled}
               vehicles={MOCK_VEHICLES}
-              title={overdue.length > 0 ? 'Scheduled' : undefined}
+              title={overdue.length > 0 ? 'Programadas' : undefined}
             />
           </TabsContent>
 

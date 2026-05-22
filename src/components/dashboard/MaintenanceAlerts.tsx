@@ -40,14 +40,14 @@ export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
     <div className="bg-surface rounded-2xl border border-subtle shadow-card p-6 flex flex-col h-full">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-[15px] font-semibold text-text-primary">Alerts</h3>
-          <p className="text-[12px] text-text-muted mt-0.5">{alerts.length} active alerts</p>
+          <h3 className="text-[15px] font-semibold text-text-primary">Alertas</h3>
+          <p className="text-[12px] text-text-muted mt-0.5">{alerts.length} alertas activas</p>
         </div>
         <Link
           href="/maintenance"
           className="flex items-center gap-1 text-[12px] text-accent-light hover:text-accent transition-colors"
         >
-          View all <ChevronRight className="w-3 h-3" />
+          Ver todas <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
 
@@ -55,7 +55,7 @@ export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
         {alerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <Shield className="w-8 h-8 text-fleet-active mb-2 opacity-60" />
-            <p className="text-[13px] text-text-muted">All clear — no active alerts</p>
+            <p className="text-[13px] text-text-muted">Todo en orden — sin alertas activas</p>
           </div>
         ) : (
           alerts.map((alert, i) => {
@@ -90,10 +90,10 @@ export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
                       {alert.daysUntil !== undefined && (
                         <span className={cn('text-[11px] font-medium flex-shrink-0', config.iconColor)}>
                           {alert.daysUntil < 0
-                            ? `${Math.abs(alert.daysUntil)}d overdue`
+                            ? `${Math.abs(alert.daysUntil)}d vencido`
                             : alert.daysUntil === 0
-                            ? 'Today'
-                            : `${alert.daysUntil}d left`}
+                            ? 'Hoy'
+                            : `${alert.daysUntil}d restantes`}
                         </span>
                       )}
                     </div>

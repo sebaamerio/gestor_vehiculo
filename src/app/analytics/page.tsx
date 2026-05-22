@@ -14,10 +14,10 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 const FUEL_DISTRIBUTION = [
-  { name: 'Gasoline', value: MOCK_VEHICLES.filter(v => v.fuelType === 'gasoline').length, color: '#F97316' },
+  { name: 'Nafta', value: MOCK_VEHICLES.filter(v => v.fuelType === 'gasoline').length, color: '#F97316' },
   { name: 'Diesel', value: MOCK_VEHICLES.filter(v => v.fuelType === 'diesel').length, color: '#60A5FA' },
-  { name: 'Electric', value: MOCK_VEHICLES.filter(v => v.fuelType === 'electric').length, color: '#22D3EE' },
-  { name: 'Hybrid', value: MOCK_VEHICLES.filter(v => v.fuelType === 'hybrid').length, color: '#34D399' },
+  { name: 'Electrico', value: MOCK_VEHICLES.filter(v => v.fuelType === 'electric').length, color: '#22D3EE' },
+  { name: 'Hibrido', value: MOCK_VEHICLES.filter(v => v.fuelType === 'hybrid').length, color: '#34D399' },
 ].filter(d => d.value > 0)
 
 const MILEAGE_BY_BRAND = Object.entries(
@@ -70,18 +70,18 @@ export default function AnalyticsPage() {
     <AppShell>
       <div className="px-6 md:px-8 py-8 max-w-[1400px] mx-auto">
         <PageHeader
-          title="Analytics"
-          description="Fleet performance and cost insights"
+          title="Estadisticas"
+          description="Rendimiento y costos de la flota"
           icon={BarChart3}
         />
 
         {/* KPI row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Fuel, label: 'Total Fuel Cost', value: formatCurrency(totalFuelCost), color: 'text-blue-400', bg: 'bg-blue-500/10' },
-            { icon: DollarSign, label: 'Maintenance Cost', value: formatCurrency(totalMaintenanceCost), color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
-            { icon: Car, label: 'Avg Mileage', value: formatMileage(Math.round(avgMileage)), color: 'text-accent-light', bg: 'bg-accent/10' },
-            { icon: TrendingUp, label: 'Total Fleet Cost', value: formatCurrency(totalFuelCost + totalMaintenanceCost), color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
+            { icon: Fuel, label: 'Costo Combustible', value: formatCurrency(totalFuelCost), color: 'text-blue-400', bg: 'bg-blue-500/10' },
+            { icon: DollarSign, label: 'Costo Reparaciones', value: formatCurrency(totalMaintenanceCost), color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
+            { icon: Car, label: 'Km Promedio', value: formatMileage(Math.round(avgMileage)), color: 'text-accent-light', bg: 'bg-accent/10' },
+            { icon: TrendingUp, label: 'Costo Total Flota', value: formatCurrency(totalFuelCost + totalMaintenanceCost), color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
           ].map((kpi, i) => (
             <motion.div
               key={kpi.label}
@@ -106,8 +106,8 @@ export default function AnalyticsPage() {
 
           {/* Fuel type distribution */}
           <div className="bg-surface rounded-2xl border border-subtle p-6">
-            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Fuel Type Distribution</h3>
-            <p className="text-[12px] text-text-muted mb-5">By vehicle count</p>
+            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Distribucion por Combustible</h3>
+            <p className="text-[12px] text-text-muted mb-5">Por cantidad de vehiculos</p>
             <div className="flex items-center gap-6">
               <div className="w-44 h-44 flex-shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
@@ -143,8 +143,8 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Mileage by brand */}
           <div className="bg-surface rounded-2xl border border-subtle p-6">
-            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Fleet Mileage by Brand</h3>
-            <p className="text-[12px] text-text-muted mb-5">Cumulative kilometers</p>
+            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Kilometraje por Marca</h3>
+            <p className="text-[12px] text-text-muted mb-5">Kilometros acumulados</p>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={MILEAGE_BY_BRAND} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
@@ -160,8 +160,8 @@ export default function AnalyticsPage() {
 
           {/* Maintenance by type */}
           <div className="bg-surface rounded-2xl border border-subtle p-6">
-            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Maintenance Costs by Type</h3>
-            <p className="text-[12px] text-text-muted mb-5">Total spending per service type</p>
+            <h3 className="text-[15px] font-semibold text-text-primary mb-1">Costos de Reparaciones por Tipo</h3>
+            <p className="text-[12px] text-text-muted mb-5">Gasto total por tipo de servicio</p>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={MAINTENANCE_BY_TYPE} layout="vertical" margin={{ top: 4, right: 4, left: 40, bottom: 0 }}>

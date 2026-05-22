@@ -44,7 +44,7 @@ function ExpiryBadge({ dateStr }: { dateStr: string }) {
   const days = daysUntilExpiry(dateStr)
 
   const config = {
-    expired: { bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger', label: 'Expired' },
+    expired: { bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger', label: 'Vencido' },
     critical: { bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger', label: `${days}d left` },
     warning: { bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance', label: `${days}d left` },
     ok: { bg: 'bg-fleet-active-bg', text: 'text-fleet-active', label: formatDate(dateStr) },
@@ -73,7 +73,7 @@ export function VehicleDetailPanel({
           className="inline-flex items-center gap-1.5 text-[13px] text-text-muted hover:text-text-secondary transition-colors mb-6"
         >
           <ChevronLeft className="w-4 h-4" />
-          Back to Fleet
+          Volver a la Flota
         </Link>
       </div>
 
@@ -119,17 +119,17 @@ export function VehicleDetailPanel({
 
           <Button onClick={onEdit} variant="outline" size="sm" className="flex-shrink-0">
             <Edit className="w-3.5 h-3.5 mr-1.5" />
-            Edit Vehicle
+            Editar Vehiculo
           </Button>
         </motion.div>
 
         {/* Quick stats bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Gauge, label: 'Mileage', value: formatMileage(vehicle.mileage) },
-            { icon: DollarSign, label: 'Total Maintenance', value: formatCurrency(totalMaintenanceCost) },
-            { icon: Fuel, label: 'Fuel Spent', value: formatCurrency(totalFuelCost) },
-            { icon: Clock, label: 'In Fleet Since', value: vehicle.purchaseDate ? formatDate(vehicle.purchaseDate, 'MMM yyyy') : '—' },
+            { icon: Gauge, label: 'Kilometraje', value: formatMileage(vehicle.mileage) },
+            { icon: DollarSign, label: 'Total Reparaciones', value: formatCurrency(totalMaintenanceCost) },
+            { icon: Fuel, label: 'Combustible Gastado', value: formatCurrency(totalFuelCost) },
+            { icon: Clock, label: 'En Flota Desde', value: vehicle.purchaseDate ? formatDate(vehicle.purchaseDate, 'MMM yyyy') : '—' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -148,17 +148,17 @@ export function VehicleDetailPanel({
         {/* Tabs */}
         <Tabs defaultValue="overview">
           <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="maintenance">
-              Maintenance
+              Reparaciones
               {maintenance.length > 0 && (
                 <span className="ml-1.5 text-[10px] bg-subtle px-1.5 py-0.5 rounded-full text-text-muted">
                   {maintenance.length}
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
-            <TabsTrigger value="fuel">Fuel Logs</TabsTrigger>
+            <TabsTrigger value="documents">Documentos</TabsTrigger>
+            <TabsTrigger value="fuel">Combustible</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -166,17 +166,17 @@ export function VehicleDetailPanel({
             <div className="grid md:grid-cols-2 gap-6">
               {/* Vehicle specs */}
               <div className="bg-surface rounded-2xl border border-subtle p-5">
-                <h3 className="text-[13px] font-semibold text-text-primary mb-1">Vehicle Specs</h3>
-                <p className="text-[12px] text-text-muted mb-4">Technical details</p>
+                <h3 className="text-[13px] font-semibold text-text-primary mb-1">Especificaciones</h3>
+                <p className="text-[12px] text-text-muted mb-4">Detalles tecnicos</p>
                 <div>
-                  <DetailRow label="Brand" value={vehicle.brand} />
-                  <DetailRow label="Model" value={vehicle.model} />
-                  <DetailRow label="Year" value={vehicle.year} />
-                  <DetailRow label="VIN" value={vehicle.vin} mono />
-                  <DetailRow label="Plate" value={vehicle.plateNumber} mono />
-                  <DetailRow label="Color" value={vehicle.color || '—'} />
-                  <DetailRow label="Fuel Type" value={<FuelBadge fuelType={vehicle.fuelType} size="sm" />} />
-                  <DetailRow label="Mileage" value={formatMileage(vehicle.mileage)} />
+                  <DetailRow label="Marca" value={vehicle.brand} />
+                  <DetailRow label="Modelo" value={vehicle.model} />
+                  <DetailRow label="Año" value={vehicle.year} />
+                  <DetailRow label="Patente" value={vehicle.plateNumber} mono />
+                  <DetailRow label="Motor" value={vehicle.motor} />
+                  <DetailRow label="Chasis" value={vehicle.chasis} mono />
+                  <DetailRow label="Combustible" value={<FuelBadge fuelType={vehicle.fuelType} size="sm" />} />
+                  <DetailRow label="Kilometraje" value={formatMileage(vehicle.mileage)} />
                 </div>
               </div>
 
@@ -184,7 +184,7 @@ export function VehicleDetailPanel({
               <div className="space-y-4">
                 {/* Driver */}
                 <div className="bg-surface rounded-2xl border border-subtle p-5">
-                  <h3 className="text-[13px] font-semibold text-text-primary mb-3">Assigned Driver</h3>
+                  <h3 className="text-[13px] font-semibold text-text-primary mb-3">Conductor Asignado</h3>
                   {driver ? (
                     <div className="flex items-center gap-3">
                       <Avatar className="w-10 h-10">
@@ -197,18 +197,18 @@ export function VehicleDetailPanel({
                       </div>
                     </div>
                   ) : (
-                    <p className="text-[13px] text-text-muted">No driver assigned</p>
+                    <p className="text-[13px] text-text-muted">Sin conductor asignado</p>
                   )}
                 </div>
 
                 {/* Document expiry */}
                 <div className="bg-surface rounded-2xl border border-subtle p-5">
-                  <h3 className="text-[13px] font-semibold text-text-primary mb-3">Document Status</h3>
+                  <h3 className="text-[13px] font-semibold text-text-primary mb-3">Estado de Documentos</h3>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Shield className="w-3.5 h-3.5 text-text-muted" />
-                        <span className="text-[13px] text-text-secondary">Insurance</span>
+                        <span className="text-[13px] text-text-secondary">Seguro</span>
                       </div>
                       <ExpiryBadge dateStr={vehicle.insuranceExpiration} />
                     </div>
@@ -216,7 +216,7 @@ export function VehicleDetailPanel({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <FileText className="w-3.5 h-3.5 text-text-muted" />
-                        <span className="text-[13px] text-text-secondary">Inspection</span>
+                        <span className="text-[13px] text-text-secondary">VTV</span>
                       </div>
                       <ExpiryBadge dateStr={vehicle.technicalInspectionExpiration} />
                     </div>
@@ -226,7 +226,7 @@ export function VehicleDetailPanel({
                 {/* Notes */}
                 {vehicle.notes && (
                   <div className="bg-surface rounded-2xl border border-subtle p-5">
-                    <h3 className="text-[13px] font-semibold text-text-primary mb-2">Notes</h3>
+                    <h3 className="text-[13px] font-semibold text-text-primary mb-2">Notas</h3>
                     <p className="text-[13px] text-text-secondary leading-relaxed">{vehicle.notes}</p>
                   </div>
                 )}
@@ -239,7 +239,7 @@ export function VehicleDetailPanel({
             {maintenance.length === 0 ? (
               <div className="bg-surface rounded-2xl border border-subtle p-12 text-center">
                 <Wrench className="w-8 h-8 text-text-muted mx-auto mb-3" />
-                <p className="text-[13px] text-text-muted">No maintenance records yet</p>
+                <p className="text-[13px] text-text-muted">Sin registros de reparacion</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -268,7 +268,7 @@ export function VehicleDetailPanel({
                           {getMaintenanceTypeLabel(record.type)}
                         </span>
                         <span className="text-[14px] font-semibold text-text-primary flex-shrink-0">
-                          {record.cost > 0 ? formatCurrency(record.cost) : 'Free'}
+                          {record.cost > 0 ? formatCurrency(record.cost) : 'Gratis'}
                         </span>
                       </div>
                       <p className="text-[12px] text-text-muted mt-0.5">{record.description}</p>
@@ -295,7 +295,7 @@ export function VehicleDetailPanel({
             {documents.length === 0 ? (
               <div className="bg-surface rounded-2xl border border-subtle p-12 text-center">
                 <FileText className="w-8 h-8 text-text-muted mx-auto mb-3" />
-                <p className="text-[13px] text-text-muted">No documents on file</p>
+                <p className="text-[13px] text-text-muted">Sin documentos registrados</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -313,7 +313,7 @@ export function VehicleDetailPanel({
                     <div className="flex-1 min-w-0">
                       <div className="text-[14px] font-semibold text-text-primary">{doc.name}</div>
                       <div className="text-[12px] text-text-muted mt-0.5">
-                        {doc.provider} · Issued {formatDate(doc.issueDate)}
+                        {doc.provider} · Emitido {formatDate(doc.issueDate)}
                       </div>
                     </div>
                     <ExpiryBadge dateStr={doc.expirationDate} />
@@ -328,7 +328,7 @@ export function VehicleDetailPanel({
             {fuelLogs.length === 0 ? (
               <div className="bg-surface rounded-2xl border border-subtle p-12 text-center">
                 <Fuel className="w-8 h-8 text-text-muted mx-auto mb-3" />
-                <p className="text-[13px] text-text-muted">No fuel logs yet</p>
+                <p className="text-[13px] text-text-muted">Sin registros de combustible</p>
               </div>
             ) : (
               <div className="space-y-3">

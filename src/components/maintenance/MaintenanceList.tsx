@@ -18,19 +18,19 @@ const STATUS_CONFIG = {
     icon: CheckCircle2,
     bg: 'bg-fleet-active-bg',
     text: 'text-fleet-active',
-    label: 'Completed',
+    label: 'Completado',
   },
   scheduled: {
     icon: Clock,
     bg: 'bg-fleet-maintenance-bg',
     text: 'text-fleet-maintenance',
-    label: 'Scheduled',
+    label: 'Programado',
   },
   overdue: {
     icon: AlertCircle,
     bg: 'bg-fleet-danger-bg',
     text: 'text-fleet-danger',
-    label: 'Overdue',
+    label: 'Vencido',
   },
 }
 
@@ -44,7 +44,7 @@ export function MaintenanceList({
     return (
       <div className="bg-surface rounded-2xl border border-subtle p-10 text-center">
         <Wrench className="w-8 h-8 text-text-muted mx-auto mb-3" />
-        <p className="text-[14px] font-medium text-text-muted">No maintenance records</p>
+        <p className="text-[14px] font-medium text-text-muted">Sin registros de reparacion</p>
       </div>
     )
   }
@@ -81,7 +81,7 @@ export function MaintenanceList({
                 </div>
                 <div className="flex-shrink-0 text-right">
                   <div className="text-[14px] font-semibold text-text-primary">
-                    {record.cost > 0 ? formatCurrency(record.cost) : 'Free'}
+                    {record.cost > 0 ? formatCurrency(record.cost) : 'Gratis'}
                   </div>
                   <span className={cn('text-[11px] font-medium', config.text)}>{config.label}</span>
                 </div>
@@ -113,9 +113,9 @@ export function MaintenanceList({
 
               {record.nextScheduledDate && (
                 <div className="mt-2 text-[11px] text-text-muted">
-                  Next: <span className="text-fleet-maintenance">{formatDate(record.nextScheduledDate)}</span>
+                  Proximo: <span className="text-fleet-maintenance">{formatDate(record.nextScheduledDate)}</span>
                   {record.nextScheduledMileage && (
-                    <span className="ml-1">or {formatMileage(record.nextScheduledMileage)}</span>
+                    <span className="ml-1">o {formatMileage(record.nextScheduledMileage)}</span>
                   )}
                 </div>
               )}

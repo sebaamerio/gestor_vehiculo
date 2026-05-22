@@ -1,14 +1,52 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Bell, Plus, Menu } from 'lucide-react'
+import { Search, Bell, Plus, Menu, Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 
 interface TopBarProps {
   onMenuClick?: () => void
   onAddVehicle?: () => void
+}
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) {
+    return <div className="w-8 h-8" />
+  }
+
+  const isDark = theme === 'dark'
+
+  return (
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      className={cn(
+        'relative w-8 h-8 flex items-center justify-center rounded-lg transition-colors',
+        isDark
+          ? 'text-text-muted hover:text-amber-400 hover:bg-amber-400/10'
+          : 'text-text-muted hover:text-violet-500 hover:bg-violet-500/10'
+      )}
+      title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+    >
+      <motion.div
+        key={isDark ? 'moon' : 'sun'}
+        initial={{ opacity: 0, rotate: -30, scale: 0.7 }}
+        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+        transition={{ duration: 0.2 }}
+      >
+        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </motion.div>
+    </motion.button>
+  )
 }
 
 export function TopBar({ onMenuClick, onAddVehicle }: TopBarProps) {
@@ -44,7 +82,7 @@ export function TopBar({ onMenuClick, onAddVehicle }: TopBarProps) {
           />
           <input
             type="text"
-            placeholder="Search vehicles, drivers…"
+            placeholder="Buscar vehiculos, conductores…"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => setSearchFocused(true)}
@@ -66,6 +104,9 @@ export function TopBar({ onMenuClick, onAddVehicle }: TopBarProps) {
 
       {/* Right: Actions */}
       <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Theme toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <button className="relative w-8 h-8 flex items-center justify-center rounded-lg text-text-muted hover:text-text-secondary hover:bg-subtle transition-colors">
           <Bell className="w-4 h-4" />
@@ -80,7 +121,7 @@ export function TopBar({ onMenuClick, onAddVehicle }: TopBarProps) {
           className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-accent hover:bg-accent-light text-white text-[13px] font-medium transition-colors shadow-glow-sm"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Add Vehicle</span>
+          <span className="hidden sm:inline">Agregar</span>
         </motion.button>
 
         {/* Avatar */}

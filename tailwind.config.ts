@@ -15,13 +15,13 @@ const config: Config = {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
-        // Design system tokens
-        base: '#0A0A0A',
+        // Design system tokens — values come from CSS variables (globals.css)
+        base: 'var(--color-base)',
         surface: {
-          DEFAULT: '#111111',
-          elevated: '#141414',
-          hover: '#181818',
-          overlay: '#1C1C1C',
+          DEFAULT: 'var(--color-surface)',
+          elevated: 'var(--color-surface-elevated)',
+          hover: 'var(--color-surface-hover)',
+          overlay: 'var(--color-surface-overlay)',
         },
         accent: {
           DEFAULT: '#7C3AED',
@@ -31,16 +31,16 @@ const config: Config = {
           glow: 'rgba(124,58,237,0.25)',
         },
         subtle: {
-          DEFAULT: 'rgba(255,255,255,0.06)',
-          hover: 'rgba(255,255,255,0.08)',
-          active: 'rgba(255,255,255,0.12)',
-          strong: 'rgba(255,255,255,0.20)',
+          DEFAULT: 'var(--color-subtle)',
+          hover: 'var(--color-subtle-hover)',
+          active: 'var(--color-subtle-active)',
+          strong: 'var(--color-subtle-strong)',
         },
         text: {
-          primary: '#FAFAFA',
-          secondary: 'rgba(255,255,255,0.60)',
-          muted: 'rgba(255,255,255,0.38)',
-          disabled: 'rgba(255,255,255,0.22)',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          muted: 'var(--color-text-muted)',
+          disabled: 'var(--color-text-disabled)',
         },
         fleet: {
           active: '#10B981',
@@ -96,12 +96,12 @@ const config: Config = {
         '4xl': '2rem',
       },
       boxShadow: {
-        card: '0 0 0 1px rgba(255,255,255,0.06)',
-        'card-hover': '0 0 0 1px rgba(255,255,255,0.10), 0 8px 32px rgba(0,0,0,0.5)',
-        elevated: '0 0 0 1px rgba(255,255,255,0.06), 0 16px 48px rgba(0,0,0,0.6)',
+        card: 'var(--shadow-card)',
+        'card-hover': 'var(--shadow-card-hover)',
+        elevated: 'var(--shadow-elevated)',
         glow: '0 0 40px rgba(124,58,237,0.35)',
         'glow-sm': '0 0 20px rgba(124,58,237,0.25)',
-        'inner-subtle': 'inset 0 1px 0 rgba(255,255,255,0.06)',
+        'inner-subtle': 'var(--shadow-inner)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

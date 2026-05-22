@@ -37,6 +37,29 @@ const BRANDS = [
   'Porsche', 'Renault', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo', 'Other',
 ]
 
+const MODELS_BY_BRAND: Record<string, string[]> = {
+  Audi:            ['A3', 'A4', 'A6', 'Q5', 'Q7'],
+  BMW:             ['Serie 3', 'Serie 5', 'X3', 'X5', 'M3'],
+  Chevrolet:       ['Onix', 'Cruze', 'Tracker', 'Spin', 'S10'],
+  Fiat:            ['Cronos', 'Pulse', 'Toro', 'Strada', 'Mobi'],
+  Ford:            ['Ranger', 'EcoSport', 'Focus', 'Kuga', 'Territory'],
+  Honda:           ['Civic', 'CR-V', 'HR-V', 'Fit', 'WR-V'],
+  Hyundai:         ['Tucson', 'Creta', 'HB20', 'Santa Fe', 'Elantra'],
+  Jeep:            ['Renegade', 'Compass', 'Commander', 'Wrangler', 'Grand Cherokee'],
+  Kia:             ['Sportage', 'Sorento', 'Cerato', 'Rio', 'Stinger'],
+  'Land Rover':    ['Defender', 'Discovery', 'Range Rover', 'Evoque', 'Freelander'],
+  'Mercedes-Benz': ['Clase A', 'Clase C', 'Clase E', 'GLC', 'GLE'],
+  Nissan:          ['Frontier', 'Kicks', 'Versa', 'March', 'X-Trail'],
+  Peugeot:         ['208', '308', '3008', '408', 'Partner'],
+  Porsche:         ['911', 'Cayenne', 'Macan', 'Panamera', 'Taycan'],
+  Renault:         ['Duster', 'Sandero', 'Logan', 'Captur', 'Kangoo'],
+  Tesla:           ['Model 3', 'Model S', 'Model X', 'Model Y', 'Cybertruck'],
+  Toyota:          ['Hilux', 'Corolla', 'SW4', 'Yaris', 'RAV4'],
+  Volkswagen:      ['Amarok', 'Polo', 'Vento', 'Gol', 'Tiguan'],
+  Volvo:           ['XC60', 'XC90', 'S60', 'V40', 'C40'],
+  Other:           [],
+}
+
 function FormField({
   label,
   children,
@@ -65,14 +88,14 @@ const EMPTY_FORM: VehicleFormData = {
   model: '',
   year: CURRENT_YEAR,
   plateNumber: '',
-  vin: '',
+  motor: '',
+  chasis: '',
   mileage: 0,
   fuelType: 'gasoline',
   status: 'active',
   assignedDriverId: undefined,
   insuranceExpiration: '',
   technicalInspectionExpiration: '',
-  color: '',
   purchaseDate: '',
   purchaseCost: undefined,
   notes: '',
@@ -90,14 +113,14 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
         model: vehicle.model,
         year: vehicle.year,
         plateNumber: vehicle.plateNumber,
-        vin: vehicle.vin,
+        motor: vehicle.motor,
+        chasis: vehicle.chasis,
         mileage: vehicle.mileage,
         fuelType: vehicle.fuelType,
         status: vehicle.status,
         assignedDriverId: vehicle.assignedDriverId,
         insuranceExpiration: vehicle.insuranceExpiration,
         technicalInspectionExpiration: vehicle.technicalInspectionExpiration,
-        color: vehicle.color || '',
         purchaseDate: vehicle.purchaseDate || '',
         purchaseCost: vehicle.purchaseCost,
         notes: vehicle.notes || '',
@@ -109,18 +132,23 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
   }, [vehicle, open])
 
   function update<K extends keyof VehicleFormData>(key: K, value: VehicleFormData[K]) {
-    setForm((prev) => ({ ...prev, [key]: value }))
+    setForm((prev) => ({
+      ...prev,
+      [key]: value,
+      ...(key === 'brand' ? { model: '' } : {}),
+    }))
     setErrors((prev) => ({ ...prev, [key]: undefined }))
   }
 
   function validate(): boolean {
     const newErrors: Partial<Record<keyof VehicleFormData, string>> = {}
-    if (!form.brand) newErrors.brand = 'Brand is required'
-    if (!form.model) newErrors.model = 'Model is required'
-    if (!form.plateNumber) newErrors.plateNumber = 'Plate number is required'
-    if (!form.vin) newErrors.vin = 'VIN is required'
-    if (!form.insuranceExpiration) newErrors.insuranceExpiration = 'Insurance expiration is required'
-    if (!form.technicalInspectionExpiration) newErrors.technicalInspectionExpiration = 'Inspection date is required'
+    if (!form.brand) newErrors.brand = 'La marca es obligatoria'
+    if (!form.model) newErrors.model = 'El modelo es obligatorio'
+    if (!form.plateNumber) newErrors.plateNumber = 'La patente es obligatoria'
+    if (!form.motor) newErrors.motor = 'El motor es obligatorio'
+    if (!form.chasis) newErrors.chasis = 'El chasis es obligatorio'
+    if (!form.insuranceExpiration) newErrors.insuranceExpiration = 'El vencimiento del seguro es obligatorio'
+    if (!form.technicalInspectionExpiration) newErrors.technicalInspectionExpiration = 'El vencimiento de la VTV es obligatorio'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -145,9 +173,9 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
               <Car className="w-4 h-4 text-accent-light" />
             </div>
             <div>
-              <DialogTitle>{isEdit ? 'Edit Vehicle' : 'Add New Vehicle'}</DialogTitle>
+              <DialogTitle>{isEdit ? 'Editar Vehiculo' : 'Agregar Nuevo Vehiculo'}</DialogTitle>
               <DialogDescription className="mt-0.5">
-                {isEdit ? 'Update vehicle information' : 'Enter details for the new fleet vehicle'}
+                {isEdit ? 'Actualizar informacion del vehiculo' : 'Ingrese los datos del nuevo vehiculo'}
               </DialogDescription>
             </div>
           </div>
@@ -156,12 +184,12 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
         <div className="px-6 py-4 space-y-6">
           {/* Basic Info */}
           <div>
-            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Vehicle Info</p>
+            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Info del Vehiculo</p>
             <div className="grid grid-cols-2 gap-3">
-              <FormField label="Brand" required error={errors.brand}>
+              <FormField label="Marca" required error={errors.brand}>
                 <Select value={form.brand} onValueChange={(v) => update('brand', v)}>
                   <SelectTrigger className={cn(errors.brand && 'border-fleet-danger/50')}>
-                    <SelectValue placeholder="Select brand" />
+                    <SelectValue placeholder="Seleccionar marca" />
                   </SelectTrigger>
                   <SelectContent>
                     {BRANDS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -169,16 +197,34 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 </Select>
               </FormField>
 
-              <FormField label="Model" required error={errors.model}>
-                <Input
-                  placeholder="e.g. Camry, Model 3"
-                  value={form.model}
-                  onChange={(e) => update('model', e.target.value)}
-                  error={!!errors.model}
-                />
+              <FormField label="Modelo" required error={errors.model}>
+                {form.brand && form.brand !== 'Other' ? (
+                  <Select
+                    value={form.model}
+                    onValueChange={(v) => update('model', v)}
+                    disabled={!form.brand}
+                  >
+                    <SelectTrigger className={cn(errors.model && 'border-fleet-danger/50')}>
+                      <SelectValue placeholder="Seleccionar modelo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(MODELS_BY_BRAND[form.brand] ?? []).map((m) => (
+                        <SelectItem key={m} value={m}>{m}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    placeholder={form.brand ? 'Ingrese el modelo' : 'Seleccione una marca primero'}
+                    value={form.model}
+                    onChange={(e) => update('model', e.target.value)}
+                    error={!!errors.model}
+                    disabled={!form.brand}
+                  />
+                )}
               </FormField>
 
-              <FormField label="Year">
+              <FormField label="Año">
                 <Select value={String(form.year)} onValueChange={(v) => update('year', Number(v))}>
                   <SelectTrigger>
                     <SelectValue />
@@ -189,17 +235,17 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 </Select>
               </FormField>
 
-              <FormField label="Fuel Type">
+              <FormField label="Combustible">
                 <Select value={form.fuelType} onValueChange={(v) => update('fuelType', v as typeof form.fuelType)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="gasoline">Gasoline</SelectItem>
+                    <SelectItem value="gasoline">Nafta</SelectItem>
                     <SelectItem value="diesel">Diesel</SelectItem>
-                    <SelectItem value="electric">Electric</SelectItem>
-                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                    <SelectItem value="cng">CNG</SelectItem>
+                    <SelectItem value="electric">Electrico</SelectItem>
+                    <SelectItem value="hybrid">Hibrido</SelectItem>
+                    <SelectItem value="cng">GNC</SelectItem>
                   </SelectContent>
                 </Select>
               </FormField>
@@ -210,9 +256,9 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
 
           {/* Registration */}
           <div>
-            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Registration</p>
+            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Registro</p>
             <div className="grid grid-cols-2 gap-3">
-              <FormField label="Plate Number" required error={errors.plateNumber}>
+              <FormField label="Patente" required error={errors.plateNumber}>
                 <Input
                   placeholder="ABC-1234"
                   value={form.plateNumber}
@@ -222,31 +268,40 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 />
               </FormField>
 
-              <FormField label="VIN" required error={errors.vin}>
+              <FormField label="Motor" required error={errors.motor}>
                 <Input
-                  placeholder="17-char VIN"
-                  value={form.vin}
-                  onChange={(e) => update('vin', e.target.value.toUpperCase())}
-                  className="font-mono text-[12px]"
-                  error={!!errors.vin}
+                  placeholder="Ej: 2.0 TSI 190cv"
+                  value={form.motor}
+                  onChange={(e) => update('motor', e.target.value.slice(0, 40))}
+                  error={!!errors.motor}
                 />
               </FormField>
 
-              <FormField label="Status">
+              <FormField label="Chasis" required error={errors.chasis}>
+                <Input
+                  placeholder="Ej: WVWZZZ6RZNY12345"
+                  value={form.chasis}
+                  onChange={(e) => update('chasis', e.target.value.toUpperCase().slice(0, 40))}
+                  className="font-mono text-[12px]"
+                  error={!!errors.chasis}
+                />
+              </FormField>
+
+              <FormField label="Estado">
                 <Select value={form.status} onValueChange={(v) => update('status', v as typeof form.status)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="maintenance">In Maintenance</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="out_of_service">Out of Service</SelectItem>
+                    <SelectItem value="active">Activo</SelectItem>
+                    <SelectItem value="maintenance">En Reparacion</SelectItem>
+                    <SelectItem value="inactive">Inactivo</SelectItem>
+                    <SelectItem value="out_of_service">Fuera de Servicio</SelectItem>
                   </SelectContent>
                 </Select>
               </FormField>
 
-              <FormField label="Mileage (km)">
+              <FormField label="Kilometraje (km)">
                 <Input
                   type="number"
                   placeholder="0"
@@ -261,9 +316,9 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
 
           {/* Expiry dates */}
           <div>
-            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Documents</p>
+            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Documentos</p>
             <div className="grid grid-cols-2 gap-3">
-              <FormField label="Insurance Expiration" required error={errors.insuranceExpiration}>
+              <FormField label="Vencimiento Seguro" required error={errors.insuranceExpiration}>
                 <Input
                   type="date"
                   value={form.insuranceExpiration}
@@ -272,7 +327,7 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 />
               </FormField>
 
-              <FormField label="Inspection Expiration" required error={errors.technicalInspectionExpiration}>
+              <FormField label="Vencimiento VTV" required error={errors.technicalInspectionExpiration}>
                 <Input
                   type="date"
                   value={form.technicalInspectionExpiration}
@@ -287,18 +342,18 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
 
           {/* Optional */}
           <div>
-            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Optional Details</p>
+            <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-3">Datos Opcionales</p>
             <div className="grid grid-cols-2 gap-3">
-              <FormField label="Assigned Driver">
+              <FormField label="Conductor Asignado">
                 <Select
                   value={form.assignedDriverId || 'none'}
                   onValueChange={(v) => update('assignedDriverId', v === 'none' ? undefined : v)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="No driver assigned" />
+                    <SelectValue placeholder="Sin conductor asignado" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">No driver assigned</SelectItem>
+                    <SelectItem value="none">Sin conductor asignado</SelectItem>
                     {MOCK_DRIVERS.filter((d) => d.status === 'active').map((d) => (
                       <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
                     ))}
@@ -306,7 +361,7 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 </Select>
               </FormField>
 
-              <FormField label="Purchase Date">
+              <FormField label="Fecha de Compra">
                 <Input
                   type="date"
                   value={form.purchaseDate}
@@ -314,7 +369,7 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                 />
               </FormField>
 
-              <FormField label="Purchase Cost ($)">
+              <FormField label="Costo de Compra ($)">
                 <Input
                   type="number"
                   placeholder="0"
@@ -322,20 +377,12 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                   onChange={(e) => update('purchaseCost', Number(e.target.value) || undefined)}
                 />
               </FormField>
-
-              <FormField label="Color">
-                <Input
-                  placeholder="e.g. Midnight Black"
-                  value={form.color}
-                  onChange={(e) => update('color', e.target.value)}
-                />
-              </FormField>
             </div>
 
             <div className="mt-3">
-              <FormField label="Notes">
+              <FormField label="Notas">
                 <Textarea
-                  placeholder="Additional notes about this vehicle…"
+                  placeholder="Notas adicionales sobre este vehiculo…"
                   value={form.notes}
                   onChange={(e) => update('notes', e.target.value)}
                   rows={3}
@@ -347,7 +394,7 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
 
         <DialogFooter>
           <Button variant="ghost" onClick={onClose} disabled={saving}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={saving}>
             {saving ? (
@@ -357,9 +404,9 @@ export function VehicleModal({ open, onClose, vehicle, onSave }: VehicleModalPro
                   transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                   className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full"
                 />
-                Saving…
+                Guardando…
               </span>
-            ) : isEdit ? 'Save Changes' : 'Add Vehicle'}
+            ) : isEdit ? 'Guardar Cambios' : 'Agregar Vehiculo'}
           </Button>
         </DialogFooter>
       </DialogContent>

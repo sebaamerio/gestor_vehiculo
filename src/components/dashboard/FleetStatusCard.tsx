@@ -15,10 +15,10 @@ interface FleetStatusCardProps {
 }
 
 const STATUS_DATA_CONFIG = [
-  { key: 'activeVehicles', label: 'Active', color: '#10B981', bg: 'bg-fleet-active-bg', text: 'text-fleet-active' },
-  { key: 'inMaintenance', label: 'Maintenance', color: '#F59E0B', bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance' },
-  { key: 'inactive', label: 'Inactive', color: '#6B7280', bg: 'bg-fleet-inactive-bg', text: 'text-fleet-inactive' },
-  { key: 'outOfService', label: 'Out of Service', color: '#EF4444', bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger' },
+  { key: 'activeVehicles', label: 'Activos', color: '#10B981', bg: 'bg-fleet-active-bg', text: 'text-fleet-active' },
+  { key: 'inMaintenance', label: 'En Reparacion', color: '#F59E0B', bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance' },
+  { key: 'inactive', label: 'Inactivos', color: '#6B7280', bg: 'bg-fleet-inactive-bg', text: 'text-fleet-inactive' },
+  { key: 'outOfService', label: 'Fuera de Servicio', color: '#EF4444', bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger' },
 ]
 
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: { name: string; value: number }[] }) => {
@@ -26,7 +26,7 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: { name
     return (
       <div className="bg-surface-overlay border border-subtle rounded-xl px-3 py-2 shadow-elevated">
         <p className="text-[12px] font-medium text-text-primary">{payload[0].name}</p>
-        <p className="text-[11px] text-text-muted">{payload[0].value} vehicles</p>
+        <p className="text-[11px] text-text-muted">{payload[0].value} vehiculos</p>
       </div>
     )
   }
@@ -46,11 +46,11 @@ export function FleetStatusCard({ stats }: FleetStatusCardProps) {
     <div className="bg-surface rounded-2xl border border-subtle shadow-card p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-[15px] font-semibold text-text-primary">Fleet Status</h3>
-          <p className="text-[12px] text-text-muted mt-0.5">{stats.totalVehicles} total vehicles</p>
+          <h3 className="text-[15px] font-semibold text-text-primary">Estado de Flota</h3>
+          <p className="text-[12px] text-text-muted mt-0.5">{stats.totalVehicles} vehiculos totales</p>
         </div>
         <div className="px-2.5 py-1 rounded-lg bg-fleet-active-bg border border-fleet-active-border">
-          <span className="text-[12px] font-semibold text-fleet-active">{activePercent}% active</span>
+          <span className="text-[12px] font-semibold text-fleet-active">{activePercent}% activos</span>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export function FleetStatusCard({ stats }: FleetStatusCardProps) {
           {/* Center text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span className="text-xl font-bold text-text-primary">{stats.activeVehicles}</span>
-            <span className="text-[10px] text-text-muted font-medium">online</span>
+            <span className="text-[10px] text-text-muted font-medium">en linea</span>
           </div>
         </div>
 

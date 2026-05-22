@@ -20,14 +20,14 @@ export interface Vehicle {
   model: string
   year: number
   plateNumber: string
-  vin: string
+  motor: string
+  chasis: string
   mileage: number
   fuelType: FuelType
   status: VehicleStatus
   assignedDriverId?: string
   insuranceExpiration: string
   technicalInspectionExpiration: string
-  color?: string
   purchaseDate?: string
   purchaseCost?: number
   notes?: string
@@ -121,14 +121,14 @@ export interface VehicleFormData {
   model: string
   year: number
   plateNumber: string
-  vin: string
+  motor: string
+  chasis: string
   mileage: number
   fuelType: FuelType
   status: VehicleStatus
   assignedDriverId?: string
   insuranceExpiration: string
   technicalInspectionExpiration: string
-  color?: string
   purchaseDate?: string
   purchaseCost?: number
   notes?: string

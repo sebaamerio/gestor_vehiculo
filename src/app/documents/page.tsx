@@ -30,7 +30,7 @@ export default function DocumentsPage() {
 
     return (
       <span className={cn('text-[11px] font-medium px-2.5 py-1 rounded-full border', config)}>
-        {status === 'expired' ? 'Expired' : status === 'ok' ? 'Valid' : `${days}d left`}
+        {status === 'expired' ? 'Vencido' : status === 'ok' ? 'Vigente' : `${days}d restantes`}
       </span>
     )
   }
@@ -77,7 +77,7 @@ export default function DocumentsPage() {
                     {vehicle && <span className="text-text-disabled">·</span>}
                     {doc.provider && <span>{doc.provider}</span>}
                     <span className="text-text-disabled">·</span>
-                    <span>Expires {formatDate(doc.expirationDate)}</span>
+                    <span>Vence {formatDate(doc.expirationDate)}</span>
                     {doc.cost && (
                       <>
                         <span className="text-text-disabled">·</span>
@@ -100,17 +100,17 @@ export default function DocumentsPage() {
     <AppShell>
       <div className="px-6 md:px-8 py-8 max-w-[1200px] mx-auto">
         <PageHeader
-          title="Documents"
-          description={`${MOCK_DOCUMENTS.length} documents · ${critical.length} need attention`}
+          title="Documentos"
+          description={`${MOCK_DOCUMENTS.length} documentos · ${critical.length} requieren atencion`}
           icon={FileText}
         />
 
         {/* Summary */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {[
-            { label: 'Expired / Critical', value: critical.length, icon: AlertTriangle, color: 'text-fleet-danger', bg: 'bg-fleet-danger-bg' },
-            { label: 'Expiring Soon', value: warning.length, icon: Shield, color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
-            { label: 'Valid', value: ok.length, icon: CheckCircle2, color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
+            { label: 'Vencidos / Criticos', value: critical.length, icon: AlertTriangle, color: 'text-fleet-danger', bg: 'bg-fleet-danger-bg' },
+            { label: 'Por Vencer', value: warning.length, icon: Shield, color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
+            { label: 'Vigentes', value: ok.length, icon: CheckCircle2, color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -130,9 +130,9 @@ export default function DocumentsPage() {
           ))}
         </div>
 
-        <DocSection title="Needs Attention" items={critical} icon={AlertTriangle} iconClass="text-fleet-danger" />
-        <DocSection title="Expiring Soon" items={warning} icon={Shield} iconClass="text-fleet-maintenance" />
-        <DocSection title="Valid Documents" items={ok} icon={CheckCircle2} iconClass="text-fleet-active" />
+        <DocSection title="Requieren Atencion" items={critical} icon={AlertTriangle} iconClass="text-fleet-danger" />
+        <DocSection title="Por Vencer" items={warning} icon={Shield} iconClass="text-fleet-maintenance" />
+        <DocSection title="Documentos Vigentes" items={ok} icon={CheckCircle2} iconClass="text-fleet-active" />
       </div>
     </AppShell>
   )

@@ -23,9 +23,9 @@ export default function DashboardPage() {
 
   const greeting = (() => {
     const h = new Date().getHours()
-    if (h < 12) return 'Good morning'
-    if (h < 18) return 'Good afternoon'
-    return 'Good evening'
+    if (h < 12) return 'Buenos dias'
+    if (h < 18) return 'Buenas tardes'
+    return 'Buenas noches'
   })()
 
   return (
@@ -41,7 +41,7 @@ export default function DashboardPage() {
           <div className="flex items-end justify-between">
             <div>
               <p className="text-[13px] text-text-muted mb-1">{greeting}</p>
-              <h1 className="text-2xl font-bold text-text-primary tracking-tight">Fleet Overview</h1>
+              <h1 className="text-2xl font-bold text-text-primary tracking-tight">Resumen de Flota</h1>
               <p className="text-[13px] text-text-muted mt-1">
                 {format(new Date(), "EEEE, MMMM d, yyyy")}
               </p>
@@ -53,14 +53,14 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-fleet-danger-bg border border-fleet-danger-border">
                   <span className="w-1.5 h-1.5 rounded-full bg-fleet-danger" />
                   <span className="text-[12px] font-medium text-fleet-danger">
-                    {stats.criticalAlerts} critical {stats.criticalAlerts === 1 ? 'alert' : 'alerts'}
+                    {stats.criticalAlerts} {stats.criticalAlerts === 1 ? 'alerta critica' : 'alertas criticas'}
                   </span>
                 </div>
               )}
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-fleet-active-bg border border-fleet-active-border">
                 <span className="w-1.5 h-1.5 rounded-full bg-fleet-active status-pulse" />
                 <span className="text-[12px] font-medium text-fleet-active">
-                  {stats.activeVehicles} active
+                  {stats.activeVehicles} activos
                 </span>
               </div>
             </div>

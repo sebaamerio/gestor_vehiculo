@@ -15,15 +15,15 @@ export default function DriversPage() {
     <AppShell>
       <div className="px-6 md:px-8 py-8 max-w-[1200px] mx-auto">
         <PageHeader
-          title="Drivers"
-          description={`${MOCK_DRIVERS.length} total · ${activeDrivers.length} active`}
+          title="Conductores"
+          description={`${MOCK_DRIVERS.length} total · ${activeDrivers.length} activos`}
           icon={Users}
         />
 
         {/* Active drivers */}
         <div className="mb-8">
           <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-4">
-            Active Drivers ({activeDrivers.length})
+            Conductores Activos ({activeDrivers.length})
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {activeDrivers.map((driver, i) => {
@@ -37,7 +37,7 @@ export default function DriversPage() {
         {otherDrivers.length > 0 && (
           <div>
             <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-4">
-              Inactive / On Leave ({otherDrivers.length})
+              Inactivos / De Licencia ({otherDrivers.length})
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {otherDrivers.map((driver, i) => {

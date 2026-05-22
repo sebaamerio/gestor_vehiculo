@@ -91,7 +91,7 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
               <div className="flex items-center gap-2">
                 <Gauge className="w-3.5 h-3.5 text-text-disabled flex-shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[11px] text-text-muted">Mileage</div>
+                  <div className="text-[11px] text-text-muted">Kilometraje</div>
                   <div className="text-[13px] font-semibold text-text-primary">
                     {formatMileage(vehicle.mileage)}
                   </div>
@@ -101,7 +101,7 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
               <div className="flex items-center gap-2">
                 <User className="w-3.5 h-3.5 text-text-disabled flex-shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[11px] text-text-muted">Driver</div>
+                  <div className="text-[11px] text-text-muted">Conductor</div>
                   <div className="text-[13px] font-semibold text-text-primary truncate">
                     {driver ? driver.name.split(' ')[0] : '—'}
                   </div>
@@ -113,7 +113,7 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
             {hasWarning && (
               <div className="mt-3 flex items-center gap-1.5 text-[11px] text-fleet-maintenance">
                 <div className="w-1.5 h-1.5 rounded-full bg-fleet-maintenance" />
-                {insuranceStatus !== 'ok' ? 'Insurance' : 'Inspection'} expiring soon
+                {insuranceStatus !== 'ok' ? 'Seguro' : 'VTV'} por vencer
               </div>
             )}
           </div>
