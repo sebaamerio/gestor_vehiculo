@@ -2,7 +2,7 @@ export type FuelType = 'gasoline' | 'diesel' | 'electric' | 'hybrid' | 'cng'
 export type VehicleStatus = 'active' | 'maintenance' | 'inactive' | 'out_of_service'
 export type DriverStatus = 'active' | 'inactive' | 'on_leave'
 export type DocumentType = 'insurance' | 'registration' | 'inspection' | 'permit' | 'other'
-export type MaintenanceType =
+export type ReparacionType =
   | 'oil_change'
   | 'tire_rotation'
   | 'brake_inspection'
@@ -37,12 +37,13 @@ export interface Vehicle {
   updatedAt: string
 }
 
-export interface MaintenanceRecord {
+export interface ReparacionRecord {
   id: string
   vehicleId: string
-  type: MaintenanceType
+  type: ReparacionType
   description: string
   date: string
+  deliveryDate?: string
   cost: number
   mileage: number
   provider?: string
@@ -106,14 +107,25 @@ export interface Alert {
 export interface DashboardStats {
   totalVehicles: number
   activeVehicles: number
-  inMaintenance: number
+  enReparacion: number
   outOfService: number
   totalDrivers: number
   activeDrivers: number
   monthlyFuelCost: number
-  monthlyMaintenanceCost: number
+  costoReparacionMensual: number
   totalMileageThisMonth: number
-  upcomingMaintenanceCount: number
+  proximasReparaciones: number
+}
+
+export interface ReparacionFormData {
+  type: ReparacionType
+  description: string
+  date: string
+  deliveryDate?: string
+  cost: number
+  mileage: number
+  provider?: string
+  status: 'completed' | 'scheduled' | 'overdue'
 }
 
 export interface VehicleFormData {

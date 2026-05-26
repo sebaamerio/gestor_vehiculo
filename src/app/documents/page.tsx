@@ -70,7 +70,7 @@ export default function DocumentsPage() {
                   </div>
                   <div className="flex items-center gap-3 mt-1 text-[12px] text-text-muted">
                     {vehicle && (
-                      <Link href={`/vehicles/${vehicle.id}`} className="text-accent-light hover:text-accent transition-colors">
+                      <Link href={`/vehiculos/${vehicle.id}`} className="text-accent-light hover:text-accent transition-colors">
                         {vehicle.brand} {vehicle.model}
                       </Link>
                     )}

@@ -8,7 +8,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts'
 import { BarChart3, TrendingUp, Fuel, Car, DollarSign } from 'lucide-react'
-import { MOCK_VEHICLES, MOCK_MAINTENANCE, MOCK_FUEL_LOGS } from '@/lib/data'
+import { MOCK_VEHICLES, MOCK_REPARACIONES, MOCK_FUEL_LOGS } from '@/lib/data'
 import { formatCurrency, formatMileage } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -29,8 +29,8 @@ const MILEAGE_BY_BRAND = Object.entries(
  .sort((a, b) => b.mileage - a.mileage)
  .slice(0, 6)
 
-const MAINTENANCE_BY_TYPE = Object.entries(
-  MOCK_MAINTENANCE.reduce((acc, m) => {
+const REPARACION_BY_TYPE = Object.entries(
+  MOCK_REPARACIONES.reduce((acc, m) => {
     acc[m.type] = (acc[m.type] || 0) + m.cost
     return acc
   }, {} as Record<string, number>)
@@ -63,7 +63,7 @@ function MileageTooltip({ active, payload, label }: { active?: boolean; payload?
 
 export default function AnalyticsPage() {
   const totalFuelCost = MOCK_FUEL_LOGS.reduce((s, f) => s + f.cost, 0)
-  const totalMaintenanceCost = MOCK_MAINTENANCE.reduce((s, m) => s + m.cost, 0)
+  const totalReparacionCost = MOCK_REPARACIONES.reduce((s, m) => s + m.cost, 0)
   const avgMileage = MOCK_VEHICLES.reduce((s, v) => s + v.mileage, 0) / MOCK_VEHICLES.length
 
   return (
@@ -79,9 +79,9 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { icon: Fuel, label: 'Costo Combustible', value: formatCurrency(totalFuelCost), color: 'text-blue-400', bg: 'bg-blue-500/10' },
-            { icon: DollarSign, label: 'Costo Reparaciones', value: formatCurrency(totalMaintenanceCost), color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
+            { icon: DollarSign, label: 'Costo Reparaciones', value: formatCurrency(totalReparacionCost), color: 'text-fleet-maintenance', bg: 'bg-fleet-maintenance-bg' },
             { icon: Car, label: 'Km Promedio', value: formatMileage(Math.round(avgMileage)), color: 'text-accent-light', bg: 'bg-accent/10' },
-            { icon: TrendingUp, label: 'Costo Total Flota', value: formatCurrency(totalFuelCost + totalMaintenanceCost), color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
+            { icon: TrendingUp, label: 'Costo Total Flota', value: formatCurrency(totalFuelCost + totalReparacionCost), color: 'text-fleet-active', bg: 'bg-fleet-active-bg' },
           ].map((kpi, i) => (
             <motion.div
               key={kpi.label}
@@ -164,7 +164,7 @@ export default function AnalyticsPage() {
             <p className="text-[12px] text-text-muted mb-5">Gasto total por tipo de servicio</p>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={MAINTENANCE_BY_TYPE} layout="vertical" margin={{ top: 4, right: 4, left: 40, bottom: 0 }}>
+                <BarChart data={REPARACION_BY_TYPE} layout="vertical" margin={{ top: 4, right: 4, left: 40, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
                   <XAxis type="number" tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
                   <YAxis type="category" dataKey="type" tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} axisLine={false} tickLine={false} width={80} />

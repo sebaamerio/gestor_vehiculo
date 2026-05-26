@@ -3,10 +3,10 @@
 import { AppShell } from '@/components/layout/AppShell'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
 import { FleetStatusCard } from '@/components/dashboard/FleetStatusCard'
-import { MaintenanceAlerts } from '@/components/dashboard/MaintenanceAlerts'
+import { ReparacionAlerts } from '@/components/dashboard/ReparacionAlerts'
 import { RecentActivity } from '@/components/dashboard/RecentActivity'
 import { ExpenseChart } from '@/components/dashboard/ExpenseChart'
-import { VehicleModal } from '@/components/vehicles/VehicleModal'
+import { VehicleModal } from '@/components/vehiculos/VehicleModal'
 import { getDashboardStats, MOCK_ALERTS, MOCK_VEHICLES } from '@/lib/data'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -78,7 +78,7 @@ export default function DashboardPage() {
             <FleetStatusCard stats={stats} />
           </div>
           <div className="lg:col-span-3">
-            <MaintenanceAlerts alerts={MOCK_ALERTS} />
+            <ReparacionAlerts alerts={MOCK_ALERTS} />
           </div>
         </div>
 

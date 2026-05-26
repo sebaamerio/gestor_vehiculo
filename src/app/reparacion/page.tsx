@@ -2,20 +2,41 @@
 
 import { useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
-import { MaintenanceList } from '@/components/maintenance/MaintenanceList'
+import { ReparacionList } from '@/components/reparacion/ReparacionList'
+import { ReparacionModal } from '@/components/reparacion/ReparacionModal'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Wrench, Calendar, DollarSign, AlertTriangle } from 'lucide-react'
-import { MOCK_MAINTENANCE, MOCK_VEHICLES, getDashboardStats } from '@/lib/data'
+import { MOCK_REPARACIONES, MOCK_VEHICLES, applyAutoStatus } from '@/lib/data'
 import { formatCurrency } from '@/lib/utils'
 import { motion } from 'framer-motion'
+import type { ReparacionRecord, ReparacionFormData } from '@/lib/types'
 
-export default function MaintenancePage() {
-  const stats = getDashboardStats()
-  const scheduled = MOCK_MAINTENANCE.filter((m) => m.status === 'scheduled')
-  const completed = MOCK_MAINTENANCE.filter((m) => m.status === 'completed')
-  const overdue = MOCK_MAINTENANCE.filter((m) => m.status === 'overdue')
-  const totalCost = MOCK_MAINTENANCE.filter((m) => m.status === 'completed').reduce((s, m) => s + m.cost, 0)
+export default function ReparacionPage() {
+  const [reparaciones, setReparaciones] = useState<ReparacionRecord[]>(() => MOCK_REPARACIONES.map(applyAutoStatus))
+  const [editingRecord, setEditingRecord] = useState<ReparacionRecord | undefined>(undefined)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const scheduled = reparaciones.filter((r) => r.status === 'scheduled')
+  const completed = reparaciones.filter((r) => r.status === 'completed')
+  const overdue = reparaciones.filter((r) => r.status === 'overdue')
+  const totalCost = completed.reduce((s, r) => s + r.cost, 0)
+
+  function handleEdit(id: string) {
+    setEditingRecord(reparaciones.find((r) => r.id === id))
+    setModalOpen(true)
+  }
+
+  function handleSave(data: ReparacionFormData) {
+    if (!editingRecord) return
+    setReparaciones((prev) =>
+      prev.map((r) => (r.id === editingRecord.id ? applyAutoStatus({ ...r, ...data }) : r))
+    )
+  }
+
+  const editingVehicle = editingRecord
+    ? MOCK_VEHICLES.find((v) => v.id === editingRecord.vehicleId)
+    : undefined
 
   return (
     <AppShell>
@@ -61,34 +82,45 @@ export default function MaintenancePage() {
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="history">Historial</TabsTrigger>
+            <TabsTrigger value="history" className="data-[state=active]:text-fleet-active">Completadas</TabsTrigger>
           </TabsList>
 
           <TabsContent value="upcoming">
             {overdue.length > 0 && (
               <div className="mb-6">
-                <MaintenanceList
+                <ReparacionList
                   records={overdue}
-                  vehicles={MOCK_VEHICLES}
+                  vehiculos={MOCK_VEHICLES}
                   title="Vencidas"
+                  onEdit={handleEdit}
                 />
               </div>
             )}
-            <MaintenanceList
+            <ReparacionList
               records={scheduled}
-              vehicles={MOCK_VEHICLES}
+              vehiculos={MOCK_VEHICLES}
               title={overdue.length > 0 ? 'Programadas' : undefined}
+              onEdit={handleEdit}
             />
           </TabsContent>
 
           <TabsContent value="history">
-            <MaintenanceList
+            <ReparacionList
               records={[...completed].sort((a, b) => b.date.localeCompare(a.date))}
-              vehicles={MOCK_VEHICLES}
+              vehiculos={MOCK_VEHICLES}
+              onEdit={handleEdit}
             />
           </TabsContent>
         </Tabs>
       </div>
+
+      <ReparacionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        vehicleMileage={editingVehicle?.mileage ?? 0}
+        record={editingRecord}
+        onSave={handleSave}
+      />
     </AppShell>
   )
 }

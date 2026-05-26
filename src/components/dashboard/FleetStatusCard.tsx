@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 interface FleetStatusCardProps {
   stats: {
     activeVehicles: number
-    inMaintenance: number
+    enReparacion: number
     outOfService: number
     inactive: number
     totalVehicles: number
@@ -16,7 +16,7 @@ interface FleetStatusCardProps {
 
 const STATUS_DATA_CONFIG = [
   { key: 'activeVehicles', label: 'Activos', color: '#10B981', bg: 'bg-fleet-active-bg', text: 'text-fleet-active' },
-  { key: 'inMaintenance', label: 'En Reparacion', color: '#F59E0B', bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance' },
+  { key: 'enReparacion', label: 'En Reparacion', color: '#F59E0B', bg: 'bg-fleet-maintenance-bg', text: 'text-fleet-maintenance' },
   { key: 'inactive', label: 'Inactivos', color: '#6B7280', bg: 'bg-fleet-inactive-bg', text: 'text-fleet-inactive' },
   { key: 'outOfService', label: 'Fuera de Servicio', color: '#EF4444', bg: 'bg-fleet-danger-bg', text: 'text-fleet-danger' },
 ]

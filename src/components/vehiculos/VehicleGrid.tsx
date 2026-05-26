@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import type { Vehicle, Driver, VehicleStatus, FuelType } from '@/lib/types'
 
 interface VehicleGridProps {
-  vehicles: Vehicle[]
+  vehiculos: Vehicle[]
   drivers: Driver[]
   onEdit?: (id: string) => void
   onAdd?: () => void
@@ -32,13 +32,13 @@ const FUEL_FILTERS: { label: string; value: FuelType | 'all' }[] = [
   { label: 'Hibrido', value: 'hybrid' },
 ]
 
-export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridProps) {
+export function VehicleGrid({ vehiculos, drivers, onEdit, onAdd }: VehicleGridProps) {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<VehicleStatus | 'all'>('all')
   const [fuelFilter, setFuelFilter] = useState<FuelType | 'all'>('all')
 
   const filtered = useMemo(() => {
-    return vehicles.filter((v) => {
+    return vehiculos.filter((v) => {
       const matchesSearch =
         !search ||
         `${v.brand} ${v.model} ${v.plateNumber} ${v.motor} ${v.chasis}`.toLowerCase().includes(search.toLowerCase())
@@ -46,7 +46,7 @@ export function VehicleGrid({ vehicles, drivers, onEdit, onAdd }: VehicleGridPro
       const matchesFuel = fuelFilter === 'all' || v.fuelType === fuelFilter
       return matchesSearch && matchesStatus && matchesFuel
     })
-  }, [vehicles, search, statusFilter, fuelFilter])
+  }, [vehiculos, search, statusFilter, fuelFilter])
 
   const hasActiveFilters = statusFilter !== 'all' || fuelFilter !== 'all' || search
 

@@ -2,21 +2,21 @@
 
 import { useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
-import { VehicleGrid } from '@/components/vehicles/VehicleGrid'
-import { VehicleModal } from '@/components/vehicles/VehicleModal'
+import { VehicleGrid } from '@/components/vehiculos/VehicleGrid'
+import { VehicleModal } from '@/components/vehiculos/VehicleModal'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Plus, Car } from 'lucide-react'
 import { MOCK_VEHICLES, MOCK_DRIVERS } from '@/lib/data'
 import type { Vehicle, VehicleFormData } from '@/lib/types'
 
-export default function VehiclesPage() {
+export default function VehiculosPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | undefined>()
-  const [vehicles, setVehicles] = useState(MOCK_VEHICLES)
+  const [vehiculos, setVehiculos] = useState(MOCK_VEHICLES)
 
   function handleEdit(id: string) {
-    const v = vehicles.find((v) => v.id === id)
+    const v = vehiculos.find((v) => v.id === id)
     if (v) {
       setEditingVehicle(v)
       setModalOpen(true)
@@ -30,7 +30,7 @@ export default function VehiclesPage() {
 
   function handleSave(data: VehicleFormData) {
     if (editingVehicle) {
-      setVehicles((prev) =>
+      setVehiculos((prev) =>
         prev.map((v) =>
           v.id === editingVehicle.id ? { ...v, ...data, updatedAt: new Date().toISOString() } : v
         )
@@ -42,7 +42,7 @@ export default function VehiclesPage() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }
-      setVehicles((prev) => [newVehicle, ...prev])
+      setVehiculos((prev) => [newVehicle, ...prev])
     }
     setModalOpen(false)
     setEditingVehicle(undefined)
@@ -53,7 +53,7 @@ export default function VehiclesPage() {
       <div className="px-6 md:px-8 py-8 max-w-[1400px] mx-auto">
         <PageHeader
           title="Vehiculos"
-          description={`${vehicles.length} vehiculos · ${vehicles.filter((v) => v.status === 'active').length} activos`}
+          description={`${vehiculos.length} vehiculos · ${vehiculos.filter((v) => v.status === 'active').length} activos`}
           icon={Car}
           actions={
             <Button onClick={handleAdd} size="sm">
@@ -64,7 +64,7 @@ export default function VehiclesPage() {
         />
 
         <VehicleGrid
-          vehicles={vehicles}
+          vehiculos={vehiculos}
           drivers={MOCK_DRIVERS}
           onEdit={handleEdit}
           onAdd={handleAdd}

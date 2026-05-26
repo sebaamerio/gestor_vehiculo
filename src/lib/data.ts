@@ -1,4 +1,4 @@
-import type { Vehicle, Driver, MaintenanceRecord, FuelLog, VehicleDocument, Alert } from './types'
+import type { Vehicle, Driver, ReparacionRecord, FuelLog, VehicleDocument, Alert } from './types'
 
 export const MOCK_DRIVERS: Driver[] = [
   {
@@ -98,8 +98,8 @@ export const MOCK_VEHICLES: Vehicle[] = [
     fuelType: 'gasoline',
     status: 'active',
     assignedDriverId: 'd1',
-    insuranceExpiration: '2025-07-15',
-    technicalInspectionExpiration: '2025-08-20',
+    insuranceExpiration: '2027-07-15',
+    technicalInspectionExpiration: '2027-08-20',
     purchaseDate: '2022-03-15',
     purchaseCost: 58000,
     brandColor: '#1C69D4',
@@ -119,8 +119,8 @@ export const MOCK_VEHICLES: Vehicle[] = [
     fuelType: 'hybrid',
     status: 'active',
     assignedDriverId: 'd2',
-    insuranceExpiration: '2025-12-01',
-    technicalInspectionExpiration: '2025-09-15',
+    insuranceExpiration: '2027-06-01',
+    technicalInspectionExpiration: '2027-03-15',
     purchaseDate: '2021-06-10',
     purchaseCost: 32000,
     brandColor: '#EB0A1E',
@@ -161,8 +161,8 @@ export const MOCK_VEHICLES: Vehicle[] = [
     fuelType: 'electric',
     status: 'active',
     assignedDriverId: 'd4',
-    insuranceExpiration: '2025-11-20',
-    technicalInspectionExpiration: '2026-01-10',
+    insuranceExpiration: '2027-11-20',
+    technicalInspectionExpiration: '2027-10-10',
     purchaseDate: '2023-04-01',
     purchaseCost: 48000,
     brandColor: '#CC0000',
@@ -252,13 +252,14 @@ export const MOCK_VEHICLES: Vehicle[] = [
   },
 ]
 
-export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
+export const MOCK_REPARACIONES: ReparacionRecord[] = [
   {
     id: 'm1',
     vehicleId: 'v1',
     type: 'oil_change',
     description: 'Full synthetic oil change + filter replacement',
     date: '2025-03-15',
+    deliveryDate: '2025-03-18',
     cost: 185,
     mileage: 45000,
     provider: 'BMW Service Center',
@@ -272,6 +273,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'tire_rotation',
     description: 'Full tire rotation and pressure check',
     date: '2025-02-20',
+    deliveryDate: '2025-02-22',
     cost: 75,
     mileage: 70000,
     provider: 'QuickFit Auto',
@@ -285,6 +287,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'brake_inspection',
     description: 'Front and rear brake pad replacement + rotor resurface',
     date: '2025-04-10',
+    deliveryDate: '2025-04-14',
     cost: 620,
     mileage: 124000,
     provider: 'AutoTech Pro',
@@ -296,6 +299,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'general_inspection',
     description: 'Annual comprehensive vehicle inspection',
     date: '2025-07-15',
+    deliveryDate: '2025-08-10',
     cost: 250,
     mileage: 50000,
     provider: 'BMW Service Center',
@@ -307,6 +311,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'battery',
     description: 'Battery health check and firmware update',
     date: '2025-05-01',
+    deliveryDate: '2025-05-20',
     cost: 0,
     mileage: 20000,
     provider: 'Tesla Service',
@@ -318,6 +323,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'oil_change',
     description: 'Hybrid system fluid check + synthetic oil change',
     date: '2025-04-05',
+    deliveryDate: '2025-04-07',
     cost: 165,
     mileage: 72000,
     provider: 'Toyota Dealership',
@@ -331,6 +337,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'air_filter',
     description: 'Engine and cabin air filter replacement',
     date: '2025-06-15',
+    deliveryDate: '2025-07-01',
     cost: 120,
     mileage: 58000,
     provider: 'Audi Service',
@@ -342,6 +349,7 @@ export const MOCK_MAINTENANCE: MaintenanceRecord[] = [
     type: 'transmission',
     description: 'Transmission fluid change',
     date: '2025-03-01',
+    deliveryDate: '2025-03-03',
     cost: 280,
     mileage: 120000,
     provider: 'AutoTech Pro',
@@ -423,12 +431,12 @@ export const MOCK_ALERTS: Alert[] = [
 ]
 
 export const MONTHLY_EXPENSE_DATA = [
-  { month: 'Nov', fuel: 1820, maintenance: 450 },
-  { month: 'Dec', fuel: 1650, maintenance: 280 },
-  { month: 'Jan', fuel: 1920, maintenance: 1200 },
-  { month: 'Feb', fuel: 1780, maintenance: 340 },
-  { month: 'Mar', fuel: 2100, maintenance: 900 },
-  { month: 'Apr', fuel: 1950, maintenance: 620 },
+  { month: 'Nov', fuel: 1820, reparacion: 450 },
+  { month: 'Dec', fuel: 1650, reparacion: 280 },
+  { month: 'Jan', fuel: 1920, reparacion: 1200 },
+  { month: 'Feb', fuel: 1780, reparacion: 340 },
+  { month: 'Mar', fuel: 2100, reparacion: 900 },
+  { month: 'Apr', fuel: 1950, reparacion: 620 },
 ]
 
 export const FUEL_CONSUMPTION_DATA = [
@@ -452,8 +460,16 @@ export function getDriverByVehicleId(vehicleId: string): Driver | undefined {
   return MOCK_DRIVERS.find((d) => d.assignedVehicleId === vehicleId)
 }
 
-export function getMaintenanceByVehicleId(vehicleId: string): MaintenanceRecord[] {
-  return MOCK_MAINTENANCE.filter((m) => m.vehicleId === vehicleId)
+const TODAY = new Date().toISOString().split('T')[0]
+
+export function applyAutoStatus(r: ReparacionRecord): ReparacionRecord {
+  if (r.status === 'completed') return r
+  if (r.deliveryDate && r.deliveryDate < TODAY) return { ...r, status: 'overdue' }
+  return r
+}
+
+export function getReparacionByVehicleId(vehicleId: string): ReparacionRecord[] {
+  return MOCK_REPARACIONES.filter((m) => m.vehicleId === vehicleId).map(applyAutoStatus)
 }
 
 export function getFuelLogsByVehicleId(vehicleId: string): FuelLog[] {
@@ -465,19 +481,19 @@ export function getDocumentsByVehicleId(vehicleId: string): VehicleDocument[] {
 }
 
 export function getDashboardStats() {
-  const vehicles = MOCK_VEHICLES
+  const vehiculos = MOCK_VEHICLES
   return {
-    totalVehicles: vehicles.length,
-    activeVehicles: vehicles.filter((v) => v.status === 'active').length,
-    inMaintenance: vehicles.filter((v) => v.status === 'maintenance').length,
-    outOfService: vehicles.filter((v) => v.status === 'out_of_service').length,
-    inactive: vehicles.filter((v) => v.status === 'inactive').length,
+    totalVehicles: vehiculos.length,
+    activeVehicles: vehiculos.filter((v) => v.status === 'active').length,
+    enReparacion: vehiculos.filter((v) => v.status === 'maintenance').length,
+    outOfService: vehiculos.filter((v) => v.status === 'out_of_service').length,
+    inactive: vehiculos.filter((v) => v.status === 'inactive').length,
     totalDrivers: MOCK_DRIVERS.length,
     activeDrivers: MOCK_DRIVERS.filter((d) => d.status === 'active').length,
     monthlyFuelCost: MOCK_FUEL_LOGS.filter((f) => f.date.startsWith('2025-04')).reduce((sum, f) => sum + f.cost, 0),
-    monthlyMaintenanceCost: MOCK_MAINTENANCE.filter((m) => m.date.startsWith('2025-04')).reduce((sum, m) => sum + m.cost, 0),
-    totalMileage: vehicles.reduce((sum, v) => sum + v.mileage, 0),
+    costoReparacionMensual: MOCK_REPARACIONES.filter((m) => m.date.startsWith('2025-04')).reduce((sum, m) => sum + m.cost, 0),
+    totalMileage: vehiculos.reduce((sum, v) => sum + v.mileage, 0),
     criticalAlerts: MOCK_ALERTS.filter((a) => a.severity === 'critical').length,
-    upcomingMaintenance: MOCK_MAINTENANCE.filter((m) => m.status === 'scheduled').length,
+    proximasReparaciones: MOCK_REPARACIONES.filter((m) => m.status === 'scheduled').length,
   }
 }

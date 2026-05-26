@@ -18,7 +18,23 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
   const brandColor = vehicle.brandColor || getBrandColor(vehicle.brand)
   const insuranceStatus = getExpiryStatus(vehicle.insuranceExpiration)
   const inspectionStatus = getExpiryStatus(vehicle.technicalInspectionExpiration)
+  const insuranceExpired = insuranceStatus === 'expired' || insuranceStatus === 'critical'
+  const inspectionExpired = inspectionStatus === 'expired' || inspectionStatus === 'critical'
+  const hasExpired = insuranceExpired || inspectionExpired
+  const expiredLabel = insuranceExpired && inspectionExpired
+    ? 'VTV y Seguro vencidos'
+    : inspectionExpired
+    ? 'VTV vencida'
+    : 'Seguro vencido'
   const hasWarning = insuranceStatus !== 'ok' || inspectionStatus !== 'ok'
+
+  const accentBar = hasExpired
+    ? 'bg-fleet-danger'
+    : vehicle.status === 'maintenance'
+    ? 'bg-fleet-maintenance'
+    : vehicle.status === 'active'
+    ? 'bg-fleet-active'
+    : 'bg-subtle'
 
   return (
     <motion.div
@@ -26,7 +42,7 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
     >
-      <Link href={`/vehicles/${vehicle.id}`} className="group block">
+      <Link href={`/vehiculos/${vehicle.id}`} className="group block">
         <div
           className={cn(
             'relative rounded-2xl border bg-surface overflow-hidden cursor-pointer',
@@ -37,10 +53,7 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
           )}
         >
           {/* Color accent bar */}
-          <div
-            className="h-1 w-full"
-            style={{ background: brandColor, opacity: vehicle.status === 'active' ? 1 : 0.4 }}
-          />
+          <div className={cn('h-1 w-full', accentBar)} />
 
           {/* Card body */}
           <div className="p-5">
@@ -55,17 +68,13 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
                     <Car className="w-3 h-3" style={{ color: brandColor }} />
                   </div>
                   <span className="text-[12px] font-semibold text-text-muted uppercase tracking-wider">
-                    {vehicle.brand}
+                    {vehicle.brand} · {vehicle.model}
                   </span>
                 </div>
-                <h3 className="text-[16px] font-semibold text-text-primary leading-tight">
-                  {vehicle.model}
+                <h3 className="text-[16px] font-semibold text-text-primary leading-tight plate">
+                  {vehicle.plateNumber}
                 </h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[12px] text-text-muted">{vehicle.year}</span>
-                  <span className="text-text-disabled">·</span>
-                  <span className="plate text-[12px] text-text-muted">{vehicle.plateNumber}</span>
-                </div>
+                <span className="text-[12px] text-text-muted mt-1">{vehicle.year}</span>
               </div>
 
               <button
@@ -82,7 +91,14 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
 
             {/* Status badges */}
             <div className="flex items-center gap-2 flex-wrap mb-4">
-              <StatusBadge status={vehicle.status} size="sm" />
+              {vehicle.status === 'active' && hasExpired ? (
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-fleet-danger-bg text-fleet-danger border border-fleet-danger-border">
+                  <span className="w-1.5 h-1.5 rounded-full bg-fleet-danger flex-shrink-0" />
+                  {expiredLabel}
+                </span>
+              ) : (
+                <StatusBadge status={vehicle.status} size="sm" />
+              )}
               <FuelBadge fuelType={vehicle.fuelType} size="sm" />
             </div>
 
@@ -109,8 +125,8 @@ export function VehicleCard({ vehicle, driver, index = 0, onEdit }: VehicleCardP
               </div>
             </div>
 
-            {/* Warning indicator */}
-            {hasWarning && (
+            {/* Warning indicator para vencimiento próximo (no crítico) */}
+            {hasWarning && !hasExpired && (
               <div className="mt-3 flex items-center gap-1.5 text-[11px] text-fleet-maintenance">
                 <div className="w-1.5 h-1.5 rounded-full bg-fleet-maintenance" />
                 {insuranceStatus !== 'ok' ? 'Seguro' : 'VTV'} por vencer

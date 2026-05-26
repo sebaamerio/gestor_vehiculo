@@ -45,8 +45,8 @@ const CustomTooltip = ({
 
 export function ExpenseChart() {
   const total = MONTHLY_EXPENSE_DATA.reduce(
-    (acc, d) => ({ fuel: acc.fuel + d.fuel, maintenance: acc.maintenance + d.maintenance }),
-    { fuel: 0, maintenance: 0 }
+    (acc, d) => ({ fuel: acc.fuel + d.fuel, reparacion: acc.reparacion + d.reparacion }),
+    { fuel: 0, reparacion: 0 }
   )
 
   return (
@@ -63,7 +63,7 @@ export function ExpenseChart() {
           </div>
           <div className="text-right">
             <div className="text-[11px] text-text-muted">Reparaciones</div>
-            <div className="text-[14px] font-semibold text-fleet-maintenance">{formatCurrency(total.maintenance)}</div>
+            <div className="text-[14px] font-semibold text-fleet-maintenance">{formatCurrency(total.reparacion)}</div>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ export function ExpenseChart() {
                 <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.2} />
                 <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id="maintenanceGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="reparacionGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.2} />
                 <stop offset="95%" stopColor="#F59E0B" stopOpacity={0} />
               </linearGradient>
@@ -107,11 +107,11 @@ export function ExpenseChart() {
             />
             <Area
               type="monotone"
-              dataKey="maintenance"
+              dataKey="reparacion"
               name="Reparaciones"
               stroke="#F59E0B"
               strokeWidth={2}
-              fill="url(#maintenanceGradient)"
+              fill="url(#reparacionGradient)"
               dot={false}
               activeDot={{ r: 4, fill: '#F59E0B', strokeWidth: 0 }}
             />

@@ -27,8 +27,8 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Vehiculos', href: '/vehicles', icon: Car },
-  { label: 'Reparaciones', href: '/maintenance', icon: Wrench, badge: 3 },
+  { label: 'Vehiculos', href: '/vehiculos', icon: Car },
+  { label: 'Reparaciones', href: '/reparacion', icon: Wrench, badge: 3 },
   { label: 'Conductores', href: '/drivers', icon: Users },
   { label: 'Documentos', href: '/documents', icon: FileText },
   { label: 'Estadisticas', href: '/analytics', icon: BarChart3 },

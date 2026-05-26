@@ -8,24 +8,26 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { StatusBadge, FuelBadge } from '@/components/shared/StatusBadge'
 import {
   Car, Gauge, Calendar, User, Shield, Wrench,
-  FileText, Fuel, ChevronLeft, Edit, MapPin, Hash,
-  TrendingUp, DollarSign, Clock
+  FileText, Fuel, ChevronLeft, Edit, DollarSign, Clock, Plus
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import {
   cn, formatDate, formatMileage, formatCurrency, getBrandColor,
-  daysUntilExpiry, getExpiryStatus, getMaintenanceTypeLabel
+  daysUntilExpiry, getExpiryStatus,
 } from '@/lib/utils'
-import type { Vehicle, Driver, MaintenanceRecord, FuelLog, VehicleDocument } from '@/lib/types'
+import { ReparacionList } from '@/components/reparacion/ReparacionList'
+import type { Vehicle, Driver, ReparacionRecord, FuelLog, VehicleDocument } from '@/lib/types'
 
 interface VehicleDetailPanelProps {
   vehicle: Vehicle
   driver?: Driver
-  maintenance: MaintenanceRecord[]
+  reparacion: ReparacionRecord[]
   fuelLogs: FuelLog[]
   documents: VehicleDocument[]
   onEdit: () => void
+  onAddMaintenance: () => void
+  onEditReparacion: (id: string) => void
 }
 
 function DetailRow({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
@@ -58,10 +60,10 @@ function ExpiryBadge({ dateStr }: { dateStr: string }) {
 }
 
 export function VehicleDetailPanel({
-  vehicle, driver, maintenance, fuelLogs, documents, onEdit,
+  vehicle, driver, reparacion, fuelLogs, documents, onEdit, onAddMaintenance, onEditReparacion,
 }: VehicleDetailPanelProps) {
   const brandColor = vehicle.brandColor || getBrandColor(vehicle.brand)
-  const totalMaintenanceCost = maintenance.reduce((sum, m) => sum + m.cost, 0)
+  const totalReparacionCost = reparacion.reduce((sum, m) => sum + m.cost, 0)
   const totalFuelCost = fuelLogs.reduce((sum, f) => sum + f.cost, 0)
 
   return (
@@ -69,7 +71,7 @@ export function VehicleDetailPanel({
       {/* Back navigation */}
       <div className="px-8 pt-6">
         <Link
-          href="/vehicles"
+          href="/vehiculos"
           className="inline-flex items-center gap-1.5 text-[13px] text-text-muted hover:text-text-secondary transition-colors mb-6"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -127,7 +129,7 @@ export function VehicleDetailPanel({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { icon: Gauge, label: 'Kilometraje', value: formatMileage(vehicle.mileage) },
-            { icon: DollarSign, label: 'Total Reparaciones', value: formatCurrency(totalMaintenanceCost) },
+            { icon: DollarSign, label: 'Total Reparaciones', value: formatCurrency(totalReparacionCost) },
             { icon: Fuel, label: 'Combustible Gastado', value: formatCurrency(totalFuelCost) },
             { icon: Clock, label: 'En Flota Desde', value: vehicle.purchaseDate ? formatDate(vehicle.purchaseDate, 'MMM yyyy') : '—' },
           ].map((stat, i) => (
@@ -151,9 +153,9 @@ export function VehicleDetailPanel({
             <TabsTrigger value="overview">Resumen</TabsTrigger>
             <TabsTrigger value="maintenance">
               Reparaciones
-              {maintenance.length > 0 && (
+              {reparacion.length > 0 && (
                 <span className="ml-1.5 text-[10px] bg-subtle px-1.5 py-0.5 rounded-full text-text-muted">
-                  {maintenance.length}
+                  {reparacion.length}
                 </span>
               )}
             </TabsTrigger>
@@ -236,58 +238,18 @@ export function VehicleDetailPanel({
 
           {/* Maintenance Tab */}
           <TabsContent value="maintenance">
-            {maintenance.length === 0 ? (
-              <div className="bg-surface rounded-2xl border border-subtle p-12 text-center">
-                <Wrench className="w-8 h-8 text-text-muted mx-auto mb-3" />
-                <p className="text-[13px] text-text-muted">Sin registros de reparacion</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {maintenance.map((record, i) => (
-                  <motion.div
-                    key={record.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.04 }}
-                    className="bg-surface rounded-xl border border-subtle p-4 flex items-start gap-4"
-                  >
-                    <div className={cn(
-                      'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5',
-                      record.status === 'completed' ? 'bg-fleet-active-bg' :
-                      record.status === 'overdue' ? 'bg-fleet-danger-bg' : 'bg-fleet-maintenance-bg'
-                    )}>
-                      <Wrench className={cn(
-                        'w-4 h-4',
-                        record.status === 'completed' ? 'text-fleet-active' :
-                        record.status === 'overdue' ? 'text-fleet-danger' : 'text-fleet-maintenance'
-                      )} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[14px] font-semibold text-text-primary">
-                          {getMaintenanceTypeLabel(record.type)}
-                        </span>
-                        <span className="text-[14px] font-semibold text-text-primary flex-shrink-0">
-                          {record.cost > 0 ? formatCurrency(record.cost) : 'Gratis'}
-                        </span>
-                      </div>
-                      <p className="text-[12px] text-text-muted mt-0.5">{record.description}</p>
-                      <div className="flex items-center gap-3 mt-2 text-[11px] text-text-disabled">
-                        <span>{formatDate(record.date)}</span>
-                        <span>·</span>
-                        <span>{formatMileage(record.mileage)}</span>
-                        {record.provider && (
-                          <>
-                            <span>·</span>
-                            <span>{record.provider}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+            <div className="flex justify-end mb-4">
+              <Button size="sm" onClick={onAddMaintenance}>
+                <Plus className="w-3.5 h-3.5 mr-1.5" />
+                Agregar Reparacion
+              </Button>
+            </div>
+            <ReparacionList
+              records={reparacion}
+              vehiculos={[vehicle]}
+              showVehicle={false}
+              onEdit={onEditReparacion}
+            />
           </TabsContent>
 
           {/* Documents Tab */}

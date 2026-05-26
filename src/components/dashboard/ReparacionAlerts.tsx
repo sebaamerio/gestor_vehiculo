@@ -7,7 +7,7 @@ import { cn, formatDate } from '@/lib/utils'
 import type { Alert } from '@/lib/types'
 import { MOCK_VEHICLES } from '@/lib/data'
 
-interface MaintenanceAlertsProps {
+interface ReparacionAlertsProps {
   alerts: Alert[]
 }
 
@@ -35,7 +35,7 @@ const ALERT_CONFIG = {
   },
 }
 
-export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
+export function ReparacionAlerts({ alerts }: MaintenanceAlertsProps) {
   return (
     <div className="bg-surface rounded-2xl border border-subtle shadow-card p-6 flex flex-col h-full">
       <div className="flex items-center justify-between mb-5">
@@ -44,7 +44,7 @@ export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
           <p className="text-[12px] text-text-muted mt-0.5">{alerts.length} alertas activas</p>
         </div>
         <Link
-          href="/maintenance"
+          href="/reparacion"
           className="flex items-center gap-1 text-[12px] text-accent-light hover:text-accent transition-colors"
         >
           Ver todas <ChevronRight className="w-3 h-3" />
@@ -71,7 +71,7 @@ export function MaintenanceAlerts({ alerts }: MaintenanceAlertsProps) {
                 transition={{ delay: i * 0.05 }}
               >
                 <Link
-                  href={`/vehicles/${alert.vehicleId}`}
+                  href={`/vehiculos/${alert.vehicleId}`}
                   className={cn(
                     'flex items-start gap-3 p-3 rounded-xl border transition-all',
                     'hover:brightness-110 cursor-pointer',

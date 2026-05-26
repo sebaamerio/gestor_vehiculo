@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { format, parseISO, differenceInDays, isPast, isWithinInterval, addDays } from 'date-fns'
-import type { VehicleStatus, FuelType, MaintenanceType } from './types'
+import type { VehicleStatus, FuelType, ReparacionType } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -84,8 +84,8 @@ export function getFuelTypeLabel(fuelType: FuelType): string {
   return labels[fuelType]
 }
 
-export function getMaintenanceTypeLabel(type: MaintenanceType): string {
-  const labels: Record<MaintenanceType, string> = {
+export function getReparacionTypeLabel(type: ReparacionType): string {
+  const labels: Record<ReparacionType, string> = {
     oil_change: 'Cambio de Aceite',
     tire_rotation: 'Rotacion de Neumaticos',
     brake_inspection: 'Revision de Frenos',

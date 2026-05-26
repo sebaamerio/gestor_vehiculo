@@ -43,8 +43,8 @@ export function StatsGrid({ stats }: StatsGridProps) {
     },
     {
       label: 'En Reparacion',
-      value: stats.inMaintenance + stats.outOfService,
-      subValue: `${stats.inMaintenance} servicio · ${stats.outOfService} fuera de linea`,
+      value: stats.enReparacion + stats.outOfService,
+      subValue: `${stats.enReparacion} servicio · ${stats.outOfService} fuera de linea`,
       icon: Wrench,
       iconBg: 'bg-fleet-maintenance-bg',
       iconColor: 'text-fleet-maintenance',
