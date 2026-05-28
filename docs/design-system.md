@@ -1,53 +1,58 @@
 # Design System
 
-## Style
+## Estética
 
-Premium modern SaaS aesthetic.
+Premium modern SaaS — oscuro, limpio, con foco en jerarquía y espacio.
 
-Inspired by:
+Referentes: Linear, Vercel, Stripe, Raycast, Lovable.
 
-- Linear
-- Vercel
-- Stripe
-- Raycast
-- Lovable
+## Colores
 
-## Typography
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--color-base` | `#0A0A0A` | Fondo general |
+| `--color-surface` | `#111111` | Cards y paneles |
+| `--color-sidebar` | `#0D0D0D` | Sidebar |
+| Borders | `rgba(255,255,255,0.08)` | Bordes sutiles |
+| Accent | `#7C3AED` | Acción principal |
 
-- Large headings
-- Strong hierarchy
-- Minimal text
-- Spacious layout
+### Colores semánticos de flota
 
-## Spacing
+| Token | Color | Significado |
+|-------|-------|-------------|
+| `fleet-active` | Verde | Vehículo activo / Reparado |
+| `fleet-maintenance` | Naranja/Amber | En reparación / Por vencer |
+| `fleet-danger` | Rojo | Vencido / Fuera de servicio |
 
-- Prefer generous whitespace
-- Avoid cramped layouts
-- Consistent padding
+## Tipografía
 
-## Components
+- Jerarquía fuerte: headings grandes, labels pequeños
+- Tamaños frecuentes: `text-[11px]`, `text-[12px]`, `text-[13px]`, `text-[14px]`, `text-[15px]`
+- Peso: `font-medium` para labels, `font-semibold` para datos, `font-bold` para títulos
 
-- Rounded corners: 24px
-- Soft shadows
-- Subtle borders
-- Glass effects used sparingly
+## Espaciado
 
-## Colors
+- Padding de cards: `p-4` o `p-5`
+- Gap entre elementos: `gap-2`, `gap-3`
+- Secciones separadas con `mb-6` o `mb-8`
+- Whitespace generoso, nunca cramped
 
-Background:
-#0A0A0A
+## Componentes
 
-Cards:
-#111111
+- Bordes redondeados: `rounded-xl` (cards), `rounded-2xl` (paneles grandes), `rounded-lg` (botones/badges)
+- Sombras: `shadow-card`, `shadow-card-hover` en hover
+- Bordes: `border border-subtle` (clase utilitaria)
+- Badges de estado: pill con `bg-*-bg`, `text-*`, `border-*-border`
 
-Borders:
-rgba(255,255,255,0.08)
+## Íconos
 
-Accent:
-#7C3AED
+- Librería: Lucide Icons
+- Tamaños: `w-3.5 h-3.5` (inline), `w-4 h-4` (botones), `w-8 h-8` (empty states)
 
-## Rules
+## Reglas
 
-- Never use Bootstrap-looking components
-- Avoid generic admin dashboards
-- Prioritize aesthetics over density
+- Sin Bootstrap, sin Material UI, sin estilos default de Tailwind sin customizar
+- Hover state obligatorio en todo elemento interactivo
+- Animaciones con Framer Motion — discretas, máximo 300ms
+- Preferir cards sobre tablas
+- Priorizar legibilidad sobre densidad
